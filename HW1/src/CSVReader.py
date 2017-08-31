@@ -32,7 +32,7 @@ class CSVReader(object):
 	def detect_data_types(self):
 		self.data_types = []
 		for i in range(len(self.columns)):
-			if self.columns[i][0] == '$':
+			if self.columns[i][0] == '$' or self.columns[i][0] == '<' or self.columns[i][0] == '>':
 				self.data_types.append(int)
 			else:
 				self.data_types.append(str)
