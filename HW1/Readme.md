@@ -5,7 +5,7 @@ src/CSVReader.csv contains the main parser class which implements the reader as 
 data/ folder contains some small and big data samples.
 
 ## Setup
-Code requires Python 2.7.12 or above
+Code requires Python 2.7.12 or above. <br />
 It doesn't require any special python packages except (`os, sys, argparse`)
 
 To run the code,
