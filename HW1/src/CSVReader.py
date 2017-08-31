@@ -3,7 +3,7 @@ import os
 import argparse
 
 
-
+# CSVReader Class for parsing csv files
 class CSVReader(object):
 	def __init__(self, filename):
 		self.path = os.path.abspath(filename)
@@ -15,10 +15,12 @@ class CSVReader(object):
 		self.ignore_list = []
 
 
+ 	# Function to cleanup a line, removes whitespace and removes comments
 	def cleanupLine(self, line):
 		res = line.split('#')[0]
 		return res.strip()
 
+	# Function to filter unwanted columns from a list. removes the elements based on ignore_list
 	def filter_unwanted_cols(self, cells):
 		res = cells
 		for i in self.ignore_list:
@@ -26,6 +28,16 @@ class CSVReader(object):
 
 		return res
 
+	# Function to detect data_types based on first character of header column names
+	def detect_data_types(self):
+		self.data_types = []
+		for i in range(len(self.columns)):
+			if self.columns[i][0] == '$':
+				self.data_types.append(int)
+			else:
+				self.data_types.append(str)
+
+	# Function to parse header
 	def parseHeader(self, line):
 		header_line = self.cleanupLine(line)
 		
@@ -33,18 +45,14 @@ class CSVReader(object):
 		
 		self.ignore_list = [i for i,x in enumerate(self.columns) if x[0] == '?']
 
-		self.data_types = []
-		for i in range(len(self.columns)):
-			if self.columns[i][0] == '$':
-				self.data_types.append(int)
-			else:
-				self.data_types.append(str)
+		self.detect_data_types();
 		
 		self.original_columns = self.columns[:]
 
 		self.columns = self.filter_unwanted_cols(self.columns)
 		self.data_types = self.filter_unwanted_cols(self.data_types)
 
+	# Function to parse a single row  
 	def parseRow(self, line):
 		row_line = self.cleanupLine(line)
 		
@@ -67,6 +75,7 @@ class CSVReader(object):
 		
 		return cells
 
+	# Main function to parse file. To be called from outside the class
 	def parse(self):
 		f = open(self.path)
 		lines = f.readlines()
