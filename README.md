@@ -1,6 +1,6 @@
 # CSC591-FSS-Fall-2017
 
-This repository contains the assignments, projects and other material for the course "CSC 591: Foundations of Software Science" (Fall 2017)< br/>
+This repository contains the assignments, projects and other material for the course "CSC 591: Foundations of Software Science" (Fall 2017)<br />
 
 Group - 'i': <br />
 Ankur Garg ([agarg12](https://github.com/iankurgarg))<br/>
