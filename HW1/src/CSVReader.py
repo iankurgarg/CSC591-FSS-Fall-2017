@@ -8,91 +8,91 @@ class CSVReader(object):
 	def __init__(self, filename):
 		self.path = os.path.abspath(filename)
 		assert (os.path.exists(self.path)), "file doesn't exist"
-		self.main_list = []
-		self.true_length = [0]
-		self.filtered_length = [0]
+		self.output = []
+		self.columns = []
+		self.original_columns = []
 		self.data_types = []
 		self.ignore_list = []
 
-	# test: l = 'outlook,?temp,$meta,play'
-	def handle_header(self, line):
-		#comment filtered out
-		header_line = line.split('#')[0]
-		header_line.strip()
-		# if header_line[-1] == ',':
-		#	header_line = header_line[0:-1]
-		# store the lengths for checking the rows
-		columns = header_line.split(',')
-		self.true_length[0] = len(columns)
-		# set the data types for each column
-		for i in range(len(columns)):
-			columns[i] = columns[i].strip()
-			if columns[i][0] == '?':
-				self.ignore_list.append(i)		# ? ==> ignore
-			elif columns[i][0] == '$':
-				self.data_types.append('int')
-			else:
-				self.data_types.append('str')
-		# filter out the columns to ignore from the header
-		for i in self.ignore_list:
-			columns.pop(i)
-		self.filtered_length[0] = len(columns)
-		return columns
 
-	def handle_row(self, line):
-		# remove comments
-		row_line = line.split('#')[0]
-		row_line.strip()
-		# check for lengths
-		columns = row_line.split(',')
-		if len(columns) != self.true_length[0]:
-			return []
-		# remove colunms to ignore
+	def cleanupLine(self, line):
+		res = line.split('#')[0]
+		return res.strip()
+
+	def filter_unwanted_cols(self, cells):
+		res = cells
 		for i in self.ignore_list:
-			columns.pop(i)
-		if len(columns) != self.filtered_length[0]:
-			return []
-		# if column is of correct length check for data types
-		for i in range(len(columns)):
-			columns[i] = columns[i].strip()
-			if self.data_types[i] == 'int':
-				try:
-					columns[i] = int(columns[i])
-				except:
-					return []
-			if self.data_types[i] == 'str':
-				try:
-					columns[i] = str(columns[i])
-				except:
-					return []
-		#print columns
-		return columns
+			res.pop(i)
+
+		return res
+
+	def parseHeader(self, line):
+		header_line = self.cleanupLine(line)
+		
+		self.columns = [x.strip() for x in header_line.split(',')]
+		
+		self.ignore_list = [i for i,x in enumerate(self.columns) if x[0] == '?']
+
+		self.data_types = []
+		for i in range(len(self.columns)):
+			if self.columns[i][0] == '$':
+				self.data_types.append(int)
+			else:
+				self.data_types.append(str)
+		
+		self.original_columns = self.columns[:]
+
+		self.columns = self.filter_unwanted_cols(self.columns)
+		self.data_types = self.filter_unwanted_cols(self.data_types)
+
+	def parseRow(self, line):
+		row_line = self.cleanupLine(line)
+		
+		cells = row_line.split(',')
+		
+		if len(cells) != len(self.original_columns):
+			return None
+
+		cells = self.filter_unwanted_cols(cells)
+		
+		if len(cells) != len(self.columns):
+			return None
+
+		for i in range(len(cells)):
+			cells[i] = cells[i].strip()
+			try:
+				cells[i] = self.data_types[i](cells[i])
+			except:
+				return None		
+		
+		return cells
 
 	def parse(self):
 		f = open(self.path)
 		lines = f.readlines()
-		row_start = 1
-		# handle header of the file, check for merge two lines
-		l = lines[0].split('#')[0].strip()
-		if l[-1] == ',':			# merge two lines if line ends with ','
-			l = l+lines[1]
-			row_start = 2
-		header = self.handle_header(l)
-		if len(header) != 0:
-			self.main_list.append(header)
-		# handle rows of the file, check for merge two lines
-		i=row_start
+		i = 0
+
+		l = self.cleanupLine(lines[i])
+		
+		if l[-1] == ',':
+			l = l+lines[i+1]
+			i += 1
+		
+		self.parseHeader(l)
+
+		if self.columns:
+			self.output.append(self.columns)
+		
 		while i < len(lines):
-			l = lines[i].split('#')[0].strip()
-			if l[-1] == ',':		# merge two lines if line ends with ','
+			l = self.cleanupLine(lines[i])
+			if l[-1] == ',':
 				l = l + lines[i+1]
-				i = i + 1
-			row = self.handle_row(l)
-			if len(row) != 0:
-				self.main_list.append(row)
-			i = i + 1
+				i += 1
+			row = self.parseRow(l)
+			if row:
+				self.output.append(row)
+			i += 1
 		f.close()
-		return
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='CSV Reader')
@@ -101,6 +101,7 @@ if __name__ == '__main__':
 
 	reader = CSVReader(args.filename)
 	reader.parse()
-	for i in reader.main_list:
+
+	for i in reader.output:
 		print i
 
