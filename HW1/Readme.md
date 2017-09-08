@@ -10,7 +10,7 @@ It doesn't require any special python packages except (`os, sys, argparse`)
 
 To run the code,
 
-`python src/CSVReader.csv data/sample.csv`
+`python src/CSVReader.py data/sample.csv`
 
 The file path can be changed as required.
 
