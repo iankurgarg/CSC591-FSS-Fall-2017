@@ -1,6 +1,8 @@
 import sys
 import os
 import argparse
+import Config as config
+from time import time
 
 
 # CSVReader Class for parsing csv files
@@ -17,7 +19,7 @@ class CSVReader(object):
 
  	# Function to cleanup a line, removes whitespace and removes comments
 	def cleanupLine(self, line):
-		res = line.split('#')[0]
+		res = line.split(config.comment)[0]
 		return res.strip()
 
 	# Function to filter unwanted columns from a list. removes the elements based on ignore_list
@@ -41,9 +43,9 @@ class CSVReader(object):
 	def parseHeader(self, line):
 		header_line = self.cleanupLine(line)
 		
-		self.columns = [x.strip() for x in header_line.split(',')]
+		self.columns = [x.strip() for x in header_line.split(config.sep)]
 		
-		self.ignore_list = [i for i,x in enumerate(self.columns) if x[0] == '?']
+		self.ignore_list = [i for i,x in enumerate(self.columns) if x[0] == config.ignore]
 
 		self.detect_data_types();
 		
@@ -56,7 +58,7 @@ class CSVReader(object):
 	def parseRow(self, line):
 		row_line = self.cleanupLine(line)
 		
-		cells = row_line.split(',')
+		cells = row_line.split(config.sep)
 		
 		if len(cells) != len(self.original_columns):
 			return None
@@ -77,13 +79,14 @@ class CSVReader(object):
 
 	# Main function to parse file. To be called from outside the class
 	def parse(self):
+		start_time = time()
 		f = open(self.path)
 		lines = f.readlines()
 		i = 0
 
 		l = self.cleanupLine(lines[i])
 		
-		if l[-1] == ',':
+		if l[-1] == config.sep:
 			l = l+lines[i+1]
 			i += 1
 		
@@ -91,6 +94,9 @@ class CSVReader(object):
 
 		if self.columns:
 			self.output.append(self.columns)
+
+		# Skipping Header Line
+		i += 1
 		
 		while i < len(lines):
 			l = self.cleanupLine(lines[i])
@@ -100,8 +106,13 @@ class CSVReader(object):
 			row = self.parseRow(l)
 			if row:
 				self.output.append(row)
+			else:
+				print 'error: Invalid Line:'+str(i)+' Skipping'
 			i += 1
 		f.close()
+		end_time = time() - start_time
+		print "File Processed. Time Taken: ", end_time, " seconds"
+
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='CSV Reader')
