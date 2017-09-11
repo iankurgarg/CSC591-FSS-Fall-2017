@@ -1,4 +1,4 @@
-# CSC591-FSS-Fall-2017
+# FSS-Fall-2017-GRP-I
 
 This repository contains the assignments, projects and other material for the course "CSC 591: Foundations of Software Science" (Fall 2017)<br />
 
