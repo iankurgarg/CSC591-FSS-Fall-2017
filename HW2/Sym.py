@@ -2,15 +2,16 @@ import sys
 sys.path.append('../HW1/src/')
 
 import Config as config
+from ColType import ColType
 
 
-class Sym(object):
+class Sym(ColType):
 	def __init__(self):
-		self.n = 0
 		self.nk = 0
 		self.counts = {}
 		self.most = 0
 		self.mode = None
+		self.n = 0
 
 	def update(self, x):
 		if (isinstance(x, str)):
