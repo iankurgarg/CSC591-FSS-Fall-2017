@@ -24,7 +24,7 @@ Table.py - Class to represnt table. (uses CSV Reader from HW1 to read input file
 ./data/ contains sample data files
 
 ## Setup
-Code requires Python 2.7.12 or above. <br />
+Code has been tested on Python 2.7.12 <br />
 It uses these packages: (`os, sys, argparse, abc`)
 
 ## Usage
