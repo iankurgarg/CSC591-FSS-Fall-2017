@@ -5,7 +5,7 @@ Num.py - Class for numerical Columns (inherits Col) <br />
 Sym.py - Class for Symbolic Columns (inherits Col) <br />
 ID.py - Generates new ID each time <br />
 Row.py - Class to represent each Row. (needs Class Table) <br />
-Table.py - Class to represnt table. (Incomplete as of now) <br />
+Table.py - Class to represnt table. (uses CSV Reader from HW1 to read input file) <br />
 
 
 ## Setup
