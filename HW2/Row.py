@@ -44,8 +44,8 @@ class Row(object):
 
 		for i, col in enumerate(table.goals):
 			w = col.weight
-			x = col.norm(row1.cells[i])
-			y = col.norm(row2.cells[i])
+			x = col.norm(row1.cells[col.pos])
+			y = col.norm(row2.cells[col.pos])
 			sum1 = sum1 - e**(w*(x-y)/n)
 			sum2 = sum2 - e**(w*(y-x)/n)
 
@@ -54,19 +54,19 @@ class Row(object):
 		else:
 			return False
 
-	def dominate(self, row, table, func=None):
+	def dominate(self, table, func=None):
 		if (func == None):
 			func = self.dominate1
 
 		res = 0
 		for row2 in table.rows:
-			if (row.ID != row2.ID):
-				if func(row, row2, table):
+			if (self.ID != row2.ID):
+				if func(self, row2, table):
 					res += 1
 
 		return res
 
 	def __str__(self):
-		return str(self.cells)
+		return "{cells = " + str(self.cells) + ", id = " + str(self.ID) + "}"
 
 

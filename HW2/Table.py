@@ -110,8 +110,32 @@ class Table(object):
 		return res
 
 
+	def dom(self, dom_func=None):
+		res = []
+		for row in self.rows:
+			res.append(row.dominate(self, dom_func))
+		return res
+
+
 if __name__ == '__main__':
 	filename = sys.argv[1]
 	tbl = Table()
 	tbl.fromCSV(filename)
+	scores = tbl.dom()
+
+
+	sortes_scores_keys = sorted(enumerate(scores), key=lambda x: x[1])
+
+	print tbl.spec
+	for i in range(5):
+		ind = sortes_scores_keys[i][0]
+		print tbl.rows[ind]
+
+	n = len(scores)
+	print ""
+	for i in range(5):
+		ind = sortes_scores_keys[n-i-1][0]
+		print tbl.rows[ind]
+
+
 
