@@ -32,9 +32,10 @@ To run the code,
 
 `python src/Table.py <file_path>`
 
-The file path can be changed as required.
-The source File Table.py requires code from HW1. It has been added in the path (using sys.path).
-To ensure that it always runs, please run it from this (/HW2/) directory (using the same command above)
+The file path can be changed as required. <br />
+The source file Table.py requires code from HW1. It has been added in the path (using sys.path). <br />
+To ensure that it always runs, please run it from this (/HW2/) directory (using the same command above)<br />
 
+## References
 
 More details about the instructions can be found at [Homeworks](https://txt.github.io/fss17/homeworks)
