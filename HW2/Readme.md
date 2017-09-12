@@ -1,16 +1,20 @@
 ## Code for HW 2
 
-src/CSVReader.csv contains the main parser class which implements the reader as per the intructions mentioned on course webpage.
+Col.py - Abstract Class for Column Type
+Num.py - Class for numerical Columns (inherits Col)
+Sym.py - Class for Symbolic Columns (inherits Col)
+ID.py - Generates new ID each time
+Row.py - Class to represent each Row. (needs Class Table)
+Table.py - Class to represnt table. (Incomplete as of now)
 
-data/ folder contains some small and big data samples.
 
 ## Setup
 Code requires Python 2.7.12 or above. <br />
-It doesn't require any special python packages except (`os, sys, argparse`)
+It doesn't require any special python packages except (`os, sys, argparse, abc`)
 
 To run the code,
 
-`python src/CSVReader.csv data/sample.csv`
+`python Table.csv <file_path>`
 
 The file path can be changed as required.
 
