@@ -53,7 +53,7 @@ class Num(ColType):
 			if (isinstance(y, int) or isinstance(y, float)):
 				x = self.norm(x)
 				y = self.norm(y)
-				return abs(x-y)**2
+				return abs(x-y)
 
 			else:
 				raise ValueError('Expected Number y but received '+str(type(y)))
