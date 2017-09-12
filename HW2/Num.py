@@ -2,10 +2,10 @@ import sys
 sys.path.append('../HW1/src/')
 
 import Config as config
-from ColType import ColType
+from Col import Col
 
 
-class Num(ColType):
+class Num(Col):
 	def __init__(self):
 		self.n = 0
 		self.mu = 0

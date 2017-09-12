@@ -2,10 +2,10 @@ import sys
 sys.path.append('../HW1/src/')
 
 import Config as config
-from ColType import ColType
+from Col import Col
 
 
-class Sym(ColType):
+class Sym(Col):
 	def __init__(self):
 		self.nk = 0
 		self.counts = {}

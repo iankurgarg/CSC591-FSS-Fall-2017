@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 
-class ColType:
+class Col:
 	__metaclass__ = ABCMeta
 
 	def __init__(self):
