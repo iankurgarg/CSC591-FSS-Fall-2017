@@ -9,6 +9,7 @@ class Row(object):
 
 
 	def update(self, cells, table):
+		self.cells = cells[:]
 		assert len(cells) == len(table.all['columns'])
 
 		for i, col in enumerate(table.all['columns']):

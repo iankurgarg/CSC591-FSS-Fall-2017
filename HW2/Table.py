@@ -14,13 +14,13 @@ class Table(object):
 		self.goals = []
 		self.less = []
 		self.more = []
-		self.name = []
+		self.name = {}
 		self.all = {'nums': [], 'syms': [], 'columns': []}
 		self.X = {'nums': [], 'syms': [], 'columns': []}
 		self.Y = {'nums': [], 'syms': [], 'columns': []}
 
 	def categories(self, txt, pos):
-		if (txt.startsWith("$")):
+		if (txt.startswith("$")):
 			col = Num()
 			col.txt = txt
 			col.weight = 1
@@ -30,7 +30,7 @@ class Table(object):
 			self.X['columns'].append(col)
 			self.all['nums'].append(col)
 			self.X['nums'].append(col)
-		if (txt.startsWith("<")):
+		if (txt.startswith("<")):
 			col = Num()
 			col.txt = txt
 			col.weight = -1
@@ -42,7 +42,7 @@ class Table(object):
 			self.goals.append(col)
 			self.less.append(col)
 			self.Y['nums'].append(col)
-		if (txt.startsWith(">")):
+		if (txt.startswith(">")):
 			col = Num()
 			col.txt = txt
 			col.weight = 1
@@ -54,7 +54,7 @@ class Table(object):
 			self.goals.append(col)
 			self.more.append(col)
 			self.Y['nums'].append(col)
-		if (txt.startsWith("!")):
+		if (txt.startswith("!")):
 			col = Sym()
 			col.txt = txt
 			col.weight = 1
@@ -64,7 +64,7 @@ class Table(object):
 			self.Y['syms'].append(col)
 			self.Y['columns'].append(col)
 			self.all['syms'].append(col)
-		if (txt.startsWith("")):
+		if (txt.startswith("")):
 			col = Sym()
 			col.txt = txt
 			col.weight = 1
@@ -80,6 +80,32 @@ class Table(object):
 	def header(self, cells):
 		self.spec = cells
 		for i, cell in enumerate(cells):
-			what, weight, where = self.categories(cell)
+			self.categories(cell, i)
 
+	def data(self, cells, old=None):
+		row = Row()
+		row.update(cells, self)
+		self.rows.append(row)
+		if old:
+			row.ID = old.ID
+
+		return row
+
+	def update(self, cells):
+		if (len(self.spec) == 0):
+			self.header(cells)
+		else:
+			self.data(cells)
+
+	def fromCSV(self, f):
+		reader = CSVReader(f)
+		reader.parse()
+		for row in reader.output:
+			self.update(row)
+
+
+if __name__ == '__main__':
+	filename = sys.argv[1]
+	tbl = Table()
+	tbl.fromCSV(filename)
 
