@@ -66,4 +66,7 @@ class Row(object):
 
 		return res
 
+	def __str__(self):
+		return str(self.cells)
+
 

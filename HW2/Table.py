@@ -30,7 +30,7 @@ class Table(object):
 			self.X['columns'].append(col)
 			self.all['nums'].append(col)
 			self.X['nums'].append(col)
-		if (txt.startswith("<")):
+		elif (txt.startswith("<")):
 			col = Num()
 			col.txt = txt
 			col.weight = -1
@@ -42,7 +42,7 @@ class Table(object):
 			self.goals.append(col)
 			self.less.append(col)
 			self.Y['nums'].append(col)
-		if (txt.startswith(">")):
+		elif (txt.startswith(">")):
 			col = Num()
 			col.txt = txt
 			col.weight = 1
@@ -54,7 +54,7 @@ class Table(object):
 			self.goals.append(col)
 			self.more.append(col)
 			self.Y['nums'].append(col)
-		if (txt.startswith("!")):
+		elif (txt.startswith("!")):
 			col = Sym()
 			col.txt = txt
 			col.weight = 1
@@ -64,7 +64,7 @@ class Table(object):
 			self.Y['syms'].append(col)
 			self.Y['columns'].append(col)
 			self.all['syms'].append(col)
-		if (txt.startswith("")):
+		elif (txt.startswith("")):
 			col = Sym()
 			col.txt = txt
 			col.weight = 1
@@ -102,6 +102,12 @@ class Table(object):
 		reader.parse()
 		for row in reader.output:
 			self.update(row)
+
+	def colsToString(self):
+		res = ""
+		for col in self.all['columns']:
+			res += col.txt +","
+		return res
 
 
 if __name__ == '__main__':
