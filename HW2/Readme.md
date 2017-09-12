@@ -1,11 +1,11 @@
 ## Code for HW 2
 
-Col.py - Abstract Class for Column Type
-Num.py - Class for numerical Columns (inherits Col)
-Sym.py - Class for Symbolic Columns (inherits Col)
-ID.py - Generates new ID each time
-Row.py - Class to represent each Row. (needs Class Table)
-Table.py - Class to represnt table. (Incomplete as of now)
+Col.py - Abstract Class for Column Type <br />
+Num.py - Class for numerical Columns (inherits Col) <br />
+Sym.py - Class for Symbolic Columns (inherits Col) <br />
+ID.py - Generates new ID each time <br />
+Row.py - Class to represent each Row. (needs Class Table) <br />
+Table.py - Class to represnt table. (Incomplete as of now) <br />
 
 
 ## Setup
