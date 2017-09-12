@@ -7,7 +7,6 @@ from Col import Col
 
 class Num(Col):
 	def __init__(self):
-		self.n = 0
 		self.mu = 0
 		self.m2 = 0
 		self.sd = 0

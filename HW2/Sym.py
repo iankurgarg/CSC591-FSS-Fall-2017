@@ -6,12 +6,12 @@ from Col import Col
 
 
 class Sym(Col):
+
 	def __init__(self):
 		self.nk = 0
 		self.counts = {}
 		self.most = 0
 		self.mode = None
-		self.n = 0
 
 	def update(self, x):
 		if (isinstance(x, str)):
@@ -61,3 +61,4 @@ if __name__ == '__main__':
 	
 	print a.distance('a', 'b')
 	print (a)
+	print a.txt

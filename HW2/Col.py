@@ -1,10 +1,14 @@
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta, abstractmethod, abstractproperty
 
 class Col:
 	__metaclass__ = ABCMeta
+	txt = ""
+	n = 0
+	weight = 0
+	pos = 0
 
 	def __init__(self):
-		self.n = 0
+		pass
 
 	@abstractmethod
 	def update(self, x):
