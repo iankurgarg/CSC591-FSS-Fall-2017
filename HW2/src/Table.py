@@ -27,7 +27,7 @@ class Table(object):
 			col.pos = pos
 			#What is the correct way to do it: line 1 or line 2?
 			self.name[col.txt] = col
-			self.name[col.txt].append(col)
+			#self.name[col.txt].append(col)
 			###
 			self.all['columns'].append(col)
 			self.X['columns'].append(col)
@@ -130,15 +130,15 @@ if __name__ == '__main__':
 	sortes_scores_keys = sorted(enumerate(scores), key=lambda x: x[1])
 
 	print tbl.spec
-	for i in range(5):
-		ind = sortes_scores_keys[i][0]
-		print tbl.rows[ind]
-
 	n = len(scores)
-	print ""
+	
+	#for i in range(4, -1, -1):
 	for i in range(5):
 		ind = sortes_scores_keys[n-i-1][0]
 		print tbl.rows[ind]
 
-
+	print ""
+	for i in range(4, -1, -1):
+		ind = sortes_scores_keys[i][0]
+		print tbl.rows[ind]
 

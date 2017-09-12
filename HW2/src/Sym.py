@@ -1,7 +1,5 @@
 import sys
-sys.path.append('../HW1/src/')
 
-import Config as config
 from Col import Col
 
 
