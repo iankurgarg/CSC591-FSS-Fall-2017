@@ -25,10 +25,7 @@ class Table(object):
 			col.txt = txt
 			col.weight = 1
 			col.pos = pos
-			#What is the correct way to do it: line 1 or line 2?
 			self.name[col.txt] = col
-			#self.name[col.txt].append(col)
-			###
 			self.all['columns'].append(col)
 			self.X['columns'].append(col)
 			self.all['nums'].append(col)
