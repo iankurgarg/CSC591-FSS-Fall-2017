@@ -26,7 +26,55 @@ class Table(object):
 			col.weight = 1
 			col.pos = pos
 			self.name[col.txt] = col
-			
+			self.all['columns'].append(col)
+			self.X['columns'].append(col)
+			self.all['nums'].append(col)
+			self.X['nums'].append(col)
+		if (txt.startsWith("<")):
+			col = Num()
+			col.txt = txt
+			col.weight = -1
+			col.pos = pos
+			self.name[col.txt] = col
+			self.all['columns'].append(col)
+			self.Y['columns'].append(col)
+			self.all['nums'].append(col)
+			self.goals.append(col)
+			self.less.append(col)
+			self.Y['nums'].append(col)
+		if (txt.startsWith(">")):
+			col = Num()
+			col.txt = txt
+			col.weight = 1
+			col.pos = pos
+			self.name[col.txt] = col
+			self.all['columns'].append(col)
+			self.Y['columns'].append(col)
+			self.all['nums'].append(col)
+			self.goals.append(col)
+			self.more.append(col)
+			self.Y['nums'].append(col)
+		if (txt.startsWith("!")):
+			col = Sym()
+			col.txt = txt
+			col.weight = 1
+			col.pos = pos
+			self.name[col.txt] = col
+			self.all['columns'].append(col)
+			self.Y['syms'].append(col)
+			self.Y['columns'].append(col)
+			self.all['syms'].append(col)
+		if (txt.startsWith("")):
+			col = Sym()
+			col.txt = txt
+			col.weight = 1
+			col.pos = pos
+			self.name[col.txt] = col
+			self.all['columns'].append(col)
+			self.X['columns'].append(col)
+			self.all['syms'].append(col)
+			self.X['syms'].append(col)
+		return
 
 
 	def header(self, cells):
