@@ -12,6 +12,11 @@ iris_X_train = iris_X[indices[:-10]]
 iris_y_train = iris_y[indices[:-10]]
 iris_X_test  = iris_X[indices[-10:]]
 iris_y_test  = iris_y[indices[-10:]]
+X = iris.data[:, :2]  # we only take the first two features.
+y = iris.target
+x_min, x_max = X[:, 0].min() - .5, X[:, 0].max() + .5
+y_min, y_max = X[:, 1].min() - .5, X[:, 1].max() + .5
+
 
 def variationOfK(n):
     # KNN Visualization.
@@ -126,3 +131,55 @@ def variationOfkernal(kernel='rbf'):
 variationOfkernal('linear')
 variationOfkernal('rbf')
 variationOfkernal('poly')
+
+# Bonus part: PCA and KNN,SVC
+
+import numpy as np
+from sklearn.decomposition import PCA
+
+pca = PCA()
+pca_X = pca.fit_transform(iris_X)
+print pca.explained_variance_ratio_
+iris_pca_X = pca_X[:,[1,2]]
+
+def plotResults(title,model):
+    # KNN Visualization.
+    h = .02  # step size in the mesh
+
+    # Create color maps
+    from matplotlib.colors import ListedColormap
+    cmap_light = ListedColormap(['#FFAAAA', '#AAFFAA', '#AAAAFF'])
+    cmap_bold = ListedColormap(['#FF0000', '#00FF00', '#0000FF'])
+    # we create an instance of Neighbours Classifier and fit the data.
+    # Plot the decision boundary. For that, we will assign a color to each
+    # point in the mesh [x_min, x_max]x[y_min, y_max].
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
+                         np.arange(y_min, y_max, h))
+    Z = model.predict(np.c_[xx.ravel(), yy.ravel()])
+    
+    # Put the result into a color plot
+    Z = Z.reshape(xx.shape)
+    plt.figure()
+    plt.pcolormesh(xx, yy, Z, cmap=cmap_light)
+
+    # Plot also the training points
+    plt.scatter(X[:, 0], X[:, 1], c=y, cmap=cmap_bold,
+                edgecolor='k', s=20)
+    plt.xlim(xx.min(), xx.max())
+    plt.ylim(yy.min(), yy.max())
+    plt.title("3-Class classification"+title)
+    plt.show()
+    return
+
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+
+knn = KNeighborsClassifier(n_neighbors=3)
+print knn.fit(iris_pca_X,iris_y)
+print 'Score:',knn.score(iris_pca_X,iris_y)
+plotResults('KNN-PCA results ',knn)
+
+svc = SVC(kernel='linear')
+print svc.fit(iris_pca_X,iris_y)
+print 'Score:',svc.score(iris_pca_X,iris_y)
+plotResults(' SVC-PCA results ',svc)
