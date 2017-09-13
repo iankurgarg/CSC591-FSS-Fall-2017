@@ -50,3 +50,7 @@ Below are the resultant visualizations after performing PCA and then training:
 2. SVC
 
 ![Low K](pca_svc.png)
+
+### Analysis of visualizations:
+
+These plots show that the training process done on principle components do not yield good results on the test set 
