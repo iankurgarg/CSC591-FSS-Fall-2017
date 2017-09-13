@@ -10,18 +10,29 @@ k_9.png, k_9_uniform.png
 
 ### Choosing best K:
 
-Should be done using cross-validation on a metric of choice like accuracy score, precision, recall, or f1
+Line no. 133 to 180
 
 ### Explore different kernels of support vector machine
 
+Line no. 183 to 258
+
 Kernel = linear
 
-![Low K](k_linear.png)
+k_linear.png
 
 Kernel = rbf
 
-![Low K](k_rbf.png)
+k_rbf.png
 
 Kernel = polynomial
 
-![Low K](k_poly.png)
+k_poly.png
+
+### PCA for dimensionality reduction
+
+Line no. 261 to 315
+
+knn_PCA.png
+
+SVC_PCA.png
+
