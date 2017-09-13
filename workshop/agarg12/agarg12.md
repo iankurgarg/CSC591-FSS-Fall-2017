@@ -30,3 +30,10 @@ RBF Kernel <br/>
 
 Poly Kernel <br/>
 ![Linear Kernel](poly_kernel.png)
+
+## Deciding kernel for SVM
+
+One way would be run cross validation over large data sets to decide which kernel works best and generalizes well.
+<br />
+
+Another way would be to generate plots for datasets for different kernels and decide the kernel which provides most generalized fit over test data. 
