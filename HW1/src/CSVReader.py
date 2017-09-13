@@ -107,7 +107,7 @@ class CSVReader(object):
 			if row:
 				self.output.append(row)
 			else:
-				print 'error: Invalid Line:'+str(i)+' Skipping'
+				print 'error: Invalid Line:'+str(i+1)+' Skipping'
 			i += 1
 		f.close()
 		end_time = time() - start_time
