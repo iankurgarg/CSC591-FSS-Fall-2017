@@ -5,9 +5,11 @@
 The plots in the experiments show that lower values of k create separated boundaries. This can represent overfitting case. Too high values add a lot of bias.
 
 K=1
+
 ![Low K](k_1.png)
 
 K=4
+
 ![High K](k_4.png)
 
 
