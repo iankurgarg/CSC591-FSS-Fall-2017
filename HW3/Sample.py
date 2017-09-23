@@ -1,4 +1,5 @@
-import Random
+from Random import Random
+import math
 
 class Sample:
 	def __init__(self, most):
@@ -7,16 +8,23 @@ class Sample:
 		self.most = most
 
 	def update(self, x):
-		self.n = self.n+1
+		self.n = self.n + 1
+		rand = Random.another()
 		if len(self.all) < self.most:
 			self.all.append(x)
-		elif r<len(i._all) / i.n:
-			i._all[math.floor(1+Random.random()*len(i._all))] = x
-		return x
+		elif rand < float(len(self.all))/self.n:
+			self.all[int(math.floor(rand*len(self.all)))] = x
 
-	def updates(t,f,i=Sample()):
+	def updates(self, t, f=None):
+		if f is None:
+			f = lambda x: x
 		for _, one in enumerate(t):
-			update(i, f(one))
-		return i
+			self.update(f(one))
 
-	
+if __name__ == "__main__":
+	Random.system()
+	s = Sample(10);
+	for i in range(20):
+		s.update(i);
+		print s.all
+
