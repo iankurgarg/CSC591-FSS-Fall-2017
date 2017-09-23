@@ -1,36 +1,46 @@
-# No class made because there is no this.x kind of reference
 import math
+import random
 
-#class Random:
 
-seed0 = 10013
-seed = seed0
-multipler = 16807.0
-modulus = 2147483647.0
-randomtable = None
-
-def park_miller_randomizer():
-	global seed
-	seed = (multipler * seed) % modulus
-	return seed / modulus
-
-def rseed(n):
-	if n:
-		seed=n
-	else:
-		seed=seed0
+class Random:
+	seed0 = 10013
+	seed = seed0
+	multipler = 16807.0
+	modulus = 2147483647.0
 	randomtable = None
 
-def system():
-  return rseed(math.random()*modulus)
+	@staticmethod
+	def park_miller_randomizer():
+		Random.seed = (Random.multipler * Random.seed) % Random.modulus
+		return Random.seed / Random.modulus
 
-def random(x=None,i=None):
-	global randomtable
-	if randomtable == None:
-		randomtable = []
-		for i in range(1, 97):
-			randomtable[i] = park_miller_randomizer()
-	x = park_miller_randomizer()
-	i = 1 + math.floor(97*x)
-	x, randomtable[i] = randomtable[i], x
-	return x
+	@staticmethod
+	def rseed(n):
+		if n:
+			Random.seed = n
+		else:
+			Random.seed = Random.seed0
+		Random.randomtable = None
+
+	@staticmethod
+	def system():
+		Random.rseed(random.uniform(0,1)*Random.modulus)
+
+	@staticmethod
+	def another():
+		if Random.randomtable is None:
+			Random.randomtable = [None]*97
+			for i in range(0, 97):
+				Random.randomtable[i] = Random.park_miller_randomizer()
+		x = Random.park_miller_randomizer()
+		i = int(math.floor(97*x))
+		temp = x
+		x = Random.randomtable[i]
+		Random.randomtable[i] = temp
+		return x
+
+
+if __name__=="__main__":
+	print Random.system()
+	for i in range(10):
+		print Random.another()
