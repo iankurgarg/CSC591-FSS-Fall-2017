@@ -1,54 +1,34 @@
+import sys
+sys.path.append('../HW1/src/')
+sys.path.append('../HW2/src/')
+
 import Num as num
-import Sample as sample
+from Sample import Sample
+import Config as config
 
-class Range:
-	self._all = []
-	self.n = 0
-	self.high = -2^63
-	self.lo =  2^63,
-	slef.span = 2^64
-
+class Range(object):
 	def __init__(self):
-		return Range()
+		self._all = Sample()
+		self.n = 0
+		self.high = -float("inf")
+		self.low =  float("inf"),
+		self.span = float("inf")
 
-	def create(self):
-		return Range()
-
-	def update(i, one, x):
+	def update(self, one, x):
 		#SOME.update(i._all, one) need to convert this line
-		sample.update(i._all, one)
-		i.n = i.n + 1
-		if x > i.hi:
-			i.hi = x  end
-		if x < i.lo:
-			i.lo = x  end
-		i.span = i.hi - i.lo
-		return x
+		self._all.update(one);
+		self.n = self.n + 1
+		if x > self.high:
+			self.high = x
+		if x < self.low:
+			self.low = x
+		self.span = self.high - self.low
+	
+	def __str__(self):
+		return "{span="+str(self.span)+", low="+str(self.low)+", n="+str(self.n)+", high="+str(self.high)+"}";
 
-	def nextRange(i) :
-		i.now  = create()
-		i.ranges.append(i.now)
 
-	# There is something weird going on with this class with 
-	# .now and .ranges are not declared in the class variables.
-	# Need to figure out what is going on. 
-
-	"""
-	local function rangeManager(t, x)  
-	local _ = { 
-	x     = x,
-	cohen = the.chop.cohen,
-	m     = the.chop.m,
-	size  = #t,
-	ranges= {} -- list of all known ranges 
-	}
-	nextRange(_)
-	_.num = NUM.updates(t, _.x)
-	_.hi  = _.num.hi
-
-	_._.enough = _.size^_.m
-	_._.epsilon= _.num.sd * _.cohen
-	return _ end
-	"""
-
-	# This is what I don't understand. Please check
+if __name__=="__main__":
+	r = Range();
+	r.update(1,1)
+	print r

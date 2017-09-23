@@ -1,11 +1,15 @@
 from Random import Random
 import math
+import Config as config
 
 class Sample:
-	def __init__(self, most):
+	def __init__(self, most=None):
 		self.all = []
 		self.n = 0
-		self.most = most
+		if most:
+			self.most = most
+		else:
+			self.most = config.sample['most']
 
 	def update(self, x):
 		self.n = self.n + 1
