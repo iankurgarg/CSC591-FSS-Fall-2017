@@ -54,13 +54,14 @@ class SuperRange(object):
         
         return out
 
-    def memo(self, here, stop, _memo, b4=None, inc=None):
+    def memo(self, here, stop, _memo):
         inc = 1;
         if (stop > here):
             inc = 1
         else:
             inc = -1
         
+        b4 = None
         if (here != stop):
             b4 = copy.deepcopy(self.memo(here+inc, stop, _memo))
         if (b4 is None):
@@ -105,7 +106,10 @@ class SuperRange(object):
         return bin
     
     def discretize(self):
-        memo_output = self.memo(0, len(self.ranges)-1, [None]*(len(self.ranges)))
+        temp = [None]*(len(self.ranges))
+        memo_output = self.memo(0, len(self.ranges)-1, temp)
+        print temp[]
+        
         self.combine(0, len(self.ranges)-1, memo_output, 1, 0)
         return SuperRange.labels(self.breaks)
 
