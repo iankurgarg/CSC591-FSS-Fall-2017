@@ -50,7 +50,7 @@ class RangeManager(object):
             value1 = x(value)
             self.now.update(value, value1)
             if (index > 0 and value1 > last and self.now.n > self.enough and self.now.span > self.epsilon):
-                # and (r.now.n-index)>r.enough and (r.now.high - value1) > r.epsilon):
+                    #and (self.now.n-index)>self.enough:
                 self.nextRange()
             last = value1
         

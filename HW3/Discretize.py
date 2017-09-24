@@ -37,6 +37,6 @@ if __name__=="__main__":
     
     s = SuperRange(final_list, x, y)
     super_ranges = s.discretize()
-    print "We have less supervised ranges."
-    for i,v in enumerate(super_ranges):
-        print "x", i, v
+    print "\nWe have fewer supervised ranges."
+    for i in (super_ranges):
+        print "x", i, super_ranges[i]

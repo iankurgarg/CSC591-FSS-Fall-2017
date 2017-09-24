@@ -76,8 +76,9 @@ class SuperRange(object):
     def combine(self, lo, hi, all, bin, lvl):
         best = self.z(all)
         
-        lmemo = [None]*(hi-lo+1)
-        rmemo = [None]*(hi-lo+1)
+        lmemo = [None]*(hi+1)
+        rmemo = [None]*(hi+1)
+        
         self.memo(hi, lo, lmemo)
         self.memo(lo, hi, rmemo)
         
@@ -87,7 +88,7 @@ class SuperRange(object):
         for j in range (lo,hi):
             l = lmemo[j]
             r = rmemo[j+1]
-            tmp = l.n/all.n*self.z(l) + r.n/all.n*self.z(r)
+            tmp = float(l.n)/all.n*self.z(l) + float(r.n)/all.n*self.z(r)
             if self.better(tmp, best):
                 cut = j
                 best = tmp
@@ -95,8 +96,8 @@ class SuperRange(object):
                 rbest = copy.deepcopy(r)
         
         if cut:
-            bin = combine(lo, cut, lbest, bin, lvl+1) + 1
-            bin = combine(cut+1, hi, rbest, bin, lvl+1)
+            bin = self.combine(lo, cut, lbest, bin, lvl+1) + 1
+            bin = self.combine(cut+1, hi, rbest, bin, lvl+1)
         else: # no cut found, mark everything "lo" to "hi" as "bin"
             if (not bin in self.breaks):
                 self.breaks[bin] = -10E32
@@ -108,9 +109,8 @@ class SuperRange(object):
     def discretize(self):
         temp = [None]*(len(self.ranges))
         memo_output = self.memo(0, len(self.ranges)-1, temp)
-        print temp[]
         
-        self.combine(0, len(self.ranges)-1, memo_output, 1, 0)
+        self.combine(0, len(self.ranges)-1, memo_output, 0, 0)
         return SuperRange.labels(self.breaks)
 
 if __name__=="__main__":
