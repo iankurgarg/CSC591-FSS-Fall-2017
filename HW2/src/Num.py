@@ -28,11 +28,14 @@ class Num(Col):
 		else:
 			raise ValueError('Expected Number x but received '+str(type(x)))
 
-	def updates(self, xs):
+	def updates(self, xs, f=None):
+		if f is None:
+			f = lambda x: x
+		
 		if (isinstance(xs, list)):
 			for i in range(len(xs)):
 				x = xs[i]
-				self.update(x)
+				self.update(f(x))
 		else:
 			raise ValueError('Expected List but received '+str(type(xs)))
 	
