@@ -1,10 +1,4 @@
-import sys
-sys.path.append('../HW1/src/')
-sys.path.append('../HW2/src/')
-
-import Num as num
 from Sample import Sample
-import Config as config
 
 class Range(object):
 	def __init__(self):
