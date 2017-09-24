@@ -49,8 +49,8 @@ class RangeManager(object):
         for index, value in enumerate(t_sorted):
             value1 = x(value)
             self.now.update(value, value1)
-            if (index > 0 and value1 > last and self.now.n > self.enough and self.now.span > self.epsilon):
-                    #and (self.now.n-index)>self.enough:
+            if (index > 0 and value1 > last and self.now.n > self.enough and self.now.span > self.epsilon
+                    and (self.nums.n-index)>self.enough and (self.nums.max - value1) > self.epsilon):
                 self.nextRange()
             last = value1
         
