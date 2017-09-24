@@ -27,6 +27,7 @@ class RangeManager(object):
         self.ranges.append(self.now)
     
     def manage(self, t, f):
+        self.ranges = []
         self.nextRange()
         self.func = f
         self.size = len(t)
@@ -35,6 +36,25 @@ class RangeManager(object):
         self.low = self.nums.min
         self.enough = math.pow(self.size, self.m)
         self.epsilon = self.nums.sd * self.cohen
+    
+    def discretize(self, t, x=None):
+        if (x is None):
+            x = lambda y: y
+        
+        t_sorted = sorted(t, key=x)
+
+        self.manage(t_sorted, x)
+
+        last = 0.0
+        for index, value in enumerate(t_sorted):
+            value1 = x(value)
+            self.now.update(value, value1)
+            if (index > 0 and value1 > last and self.now.n > self.enough and self.now.span > self.epsilon):
+                # and (r.now.n-index)>r.enough and (r.now.high - value1) > r.epsilon):
+                self.nextRange()
+            last = value1
+        
+        return self.ranges
 
 if __name__=="__main__":
     r = RangeManager();
