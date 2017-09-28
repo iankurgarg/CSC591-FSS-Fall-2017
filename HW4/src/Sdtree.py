@@ -4,8 +4,8 @@ sys.path.append('../HW2/src/')
 sys.path.append('../HW3/src/')
 
 import Config as the
-import Num as num
-import Table as t
+from Num import Num
+from Table import Table
 
 class Sdtree:
 	def __init__(self):
@@ -27,8 +27,7 @@ class Sdtree:
 		self.stats = num.updates(t.rows, yfun)
 		return
 
-	def order(self,t,y):
-		
+	def order(self):
 		def xpect(col):
 			tmp = 0
 			for _,x in enumerate(cols.nums):
@@ -36,22 +35,21 @@ class Sdtree:
 		return tmp
 
 		def whatif(head, y):
-			col = {'pos':head.pos, 'what': head.txt, 'nums':{}, 'n':0}
-			for _,row in enumerate(t.rows):
+			col = {'pos': head.pos, 'what': head.txt, 'nums': {}, 'n':0}
+			for _, row in enumerate(self._t.rows):
 				x = row.cells[col['pos']]
 				col['n'] = col['n'] + 1
 				col['nums']['x'] = num.update(col['nums']['x'], y(row))
 			return {'key':xpect(col), 'val':col}
-		out = []
-		for _,h in enumerate(t.x.cols):
-			out.append(whatif(h,y))
-		# how to write function (x,y) return x.key < y.key
-		# sorted(out) ?
-		table.sort(out,x.key<y.key)
-		# the last line too
-		return lst.collect(out, x.val)
 
-	def grow1(self,above,yfun,rows,lvl,b4,pos,attr,val):
+		out = []
+		for _,h in enumerate(self._t.x.cols):
+			out.append(whatif(h, self.yfun))
+
+		out = sorted(out, key=lambda a: a['key'])
+		return [x['val'] for x in out]
+
+	def grow1(self, above, yfun, rows, lvl, b4, pos, attr, val):
 		def pad():
 			# is the below statement str('| '+lvl).format("%-20s")
 			return str.fmt("%-20s",string.rep('| ',lvl))
@@ -83,15 +81,16 @@ class Sdtree:
 						if len(rows) < len(row):
 							grow1(here,yfun,rows1,lvl+1,here.stats.sd,cut.pos,cut.what,val)
 
-	def grow(self,t,y):
-		yfun = tbl[y](t)
-		root = create(t,yfun)
-		grow1(root,yfun,t.rows,0,10^32)
+	def grow(self):
+		# ?? first line change karna hai
+		yfun = tbl[self.yfun](self._t)
+		# root = self.create(t, yfun)
+		self.grow1(root,yfun,t.rows,0,1E32)
 		return root
 
-	def tprint(self,tr, lvl=0):
+	def tprint(self, tr, lvl=0):
 		def pad():
-			return '| '+str(lvl-1)
+			return '| ' + str(lvl-1)
 		def left(x):
 			return str('%-20s',x)
 		suffix=""
@@ -105,7 +104,7 @@ class Sdtree:
 			tprint(tr._kinds[j],lvl+1)
 		return
 
-	def leaf(self,tr,cells,lvl=0):
+	def leaf(self, tr, cells, lvl=0):
 		for j,kid in enumerate(tr._kids):
 			pos,val = kid.pos, kid.val
 			if cells[kid.pos] == kid.val:
@@ -115,6 +114,16 @@ class Sdtree:
 
 if __name__=="__main__":
 	# Main function call to run the script
+	filename = sys.argv[1]
 	tree_build = Sdtree()
+	tbl = Table()
+	tbl.fromCSV(filename)
+	print tbl.colsToString()
+	# print "something here"
+	yfunc = lambda y: y
+	pos = 0
+
+
+
 	#tree_build.create()
 	
