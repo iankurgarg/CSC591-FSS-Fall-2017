@@ -28,13 +28,33 @@ class Num(Col):
 		else:
 			raise ValueError('Expected Number x but received '+str(type(x)))
 
-	def updates(self, xs):
+	def updates(self, xs, f=None):
+		if f is None:
+			f = lambda x: x
+		
 		if (isinstance(xs, list)):
 			for i in range(len(xs)):
 				x = xs[i]
-				self.update(x)
+				self.update(f(x))
 		else:
 			raise ValueError('Expected List but received '+str(type(xs)))
+	
+	def about(self):
+		ret = {};
+		ret['pos'] = self.pos;
+		ret['txt'] = self.txt;
+		ret['n'] = self.n;
+		ret['mu'] = self.mu;
+		ret['sd'] = self.sd;
+		ret['max'] = self.max;
+		ret['min'] = self.min;
+		return ret;
+	
+	def like(self, x):
+		var = self.sd*self.sd;
+		denom = Math.pow((2*Math.pi*var), 0.5)
+		num = Math.pow(2.718281, (-1*Math.pow(x-self.mu, 2)/(2*var)))
+		return num/(denom + 10e-64)
 
 
 	def norm(self, x):

@@ -1,6 +1,7 @@
 import sys
 
 from Col import Col
+import numpy as np
 
 
 class Sym(Col):
@@ -10,6 +11,7 @@ class Sym(Col):
 		self.counts = {}
 		self.most = 0
 		self.mode = None
+		self._ent = None
 
 	def update(self, x):
 		if (isinstance(x, str)):
@@ -40,6 +42,15 @@ class Sym(Col):
 			return x
 		else:
 			raise ValueError('Expected String but received '+str(type(x)))
+	
+	def ent(self):
+		if (self._ent is None):
+			e = 0
+			for i, x in enumerate(self.counts):
+				e = e - ((float(x)/self.n)*(np.log((float(f)/self.n), 2)))
+			self._ent = e
+		
+		return self._ent
 
 	def distance(self, x, y):
 		if (isinstance(x, str) and isinstance(y, str)):
