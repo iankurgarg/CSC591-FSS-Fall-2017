@@ -1,4 +1,9 @@
-import config as the
+import sys
+sys.path.append('../HW1/src/')
+sys.path.append('../HW2/src/')
+sys.path.append('../HW3/src/')
+
+import Config as the
 import Num as num
 import Table as t
 
@@ -23,12 +28,7 @@ class sdtree:
 		return
 
 	def order(t,y):
-		#def __init__(self, t, y):
-		#	self.t = t
-		#	self.y = y
-		#	self,.out = {}
-		#return
-
+		
 		def xpect(col):
 			tmp = 0
 			for _,x in enumerate(cols.nums):
