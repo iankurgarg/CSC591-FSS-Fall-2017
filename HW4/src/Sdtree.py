@@ -24,7 +24,7 @@ class Sdtree:
 		self.pos = pos
 		self.attr = attr
 		self.val = val
-		self.stats = num.updates(t.rows, yfun)
+		self.stats = Num.updates(t.rows, yfun)
 		return
 
 	def order(self):
@@ -49,21 +49,28 @@ class Sdtree:
 		out = sorted(out, key=lambda a: a['key'])
 		return [x['val'] for x in out]
 
-	def grow1(self, above, yfun, rows, lvl, b4, pos, attr, val):
+	@staticmethod
+	def grow1(above, yfun, rows, lvl, b4, pos, attr, val):
 		def pad():
 			# is the below statement str('| '+lvl).format("%-20s")
-			return str.fmt("%-20s",string.rep('| ',lvl))
+			#return str.fmt("%-20s",string.rep('| ',lvl))
+			return str('| '+lvl).format("%-20s")
 
 		def likeAbove():
 			# what is our version of tbl.copy? Table.py does not have a copy function. Shoud we just return
-			# rows = copy.copy(above._t)
-			# return rows
-			return tbl.copy(above._t, rows)
-
+			#return tbl.copy(above._t, rows)
+			rows = copy.copy(above._t)
+			return rows
+			
+		here = None
 		if len(rows) >= the.tree.min:
 			if lvl <= the.tree.maxDepth:
 				# This line looks unfamiliar
-				here = (lvl==0 and above or create(likeAbove(), yfun, pos, attr, val))
+				# here = (lvl==0 and above or create(likeAbove(), yfun, pos, attr, val))
+				if lvl==0:
+					here=above
+				else:
+					here = Sdtree().create(likeAbove(),yfun,pos,attr,val)			
 				if here.stats.sd < b4:
 					if lvl > 0:
 						above._kids.append(here)
@@ -72,27 +79,27 @@ class Sdtree:
 					kids=[]
 					rows1 = []
 					for _,r in enumerate(rows):
-						val = r.cells[cut.pos]
-						if len(kids) > 0:
-							rows1.append(kids[val])
+						val = r.cells[cut.pos] # this works because cut is a col
+						if (kids!=None) and (len(kids) > 0):
+							rows1 = kids[val]
 						rows1.append(r)
 						kids[val] = rows1
 					for val,rows1 in enumerate(kids):
-						if len(rows) < len(row):
+						if len(rows1) < len(row):
 							grow1(here,yfun,rows1,lvl+1,here.stats.sd,cut.pos,cut.what,val)
 
 	def grow(self):
 		# ?? first line change karna hai
 		yfun = tbl[self.yfun](self._t)
 		# root = self.create(t, yfun)
-		self.grow1(root,yfun,t.rows,0,1E32)
+		Sdtree.grow1(self,yfun,t.rows,0,1E32)
 		return root
 
 	def tprint(self, tr, lvl=0):
 		def pad():
 			return '| ' + str(lvl-1)
 		def left(x):
-			return str('%-20s',x)
+			return str(x).format('%-20s')
 		suffix=""
 		if len(tr._kinds) == 0 or lvl==0:
 			suffix = str("n=%s mu=%-.2f sd=%-.2f", tr.stats.n, tr.stats.mu, tr.stats.sd)
