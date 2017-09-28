@@ -36,7 +36,7 @@ class Sdtree:
 		return tmp
 
 		def whatif(head, y):
-			col = {'pos':head.pos, 'what'=head.txt, 'nums'={}, 'n'=0}
+			col = {'pos':head.pos, 'what': head.txt, 'nums':{}, 'n':0}
 			for _,row in enumerate(t.rows):
 				x = row.cells[col['pos']]
 				col['n'] = col['n'] + 1
@@ -65,7 +65,7 @@ class Sdtree:
 		if len(rows) >= the.tree.min:
 			if lvl <= the.tree.maxDepth:
 				# This line looks unfamiliar
-				here = (lvl==0 and above or create(likeAbove(), yfun, pos, attr, val)
+				here = (lvl==0 and above or create(likeAbove(), yfun, pos, attr, val))
 				if here.stats.sd < b4:
 					if lvl > 0:
 						above._kids.append(here)
@@ -95,9 +95,9 @@ class Sdtree:
 		def left(x):
 			return str('%-20s',x)
 		suffix=""
-		if len(tr._kinds) ==- or lvl==0:
+		if len(tr._kinds) == 0 or lvl==0:
 			suffix = str("n=%s mu=%-.2f sd=%-.2f", tr.stats.n, tr.stats.mu, tr.stats.sd)
-		if lvl = 0:
+		if lvl == 0:
 			print "\n" + suffix
 		else:
 			print left(pad())+tr.attr+"="+tr.val+"\t:"+suffix
@@ -116,5 +116,5 @@ class Sdtree:
 if __name__=="__main__":
 	# Main function call to run the script
 	tree_build = Sdtree()
-	tree_build.create()
+	#tree_build.create()
 	
