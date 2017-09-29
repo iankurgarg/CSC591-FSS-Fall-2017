@@ -15,7 +15,7 @@ class Col:
 		pass
 
 	@abstractmethod
-	def updates(self, xs):
+	def updates(self, xs, f):
 		pass
 
 	@abstractmethod
