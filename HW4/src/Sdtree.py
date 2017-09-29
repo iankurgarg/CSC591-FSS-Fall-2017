@@ -3,9 +3,10 @@ sys.path.append('../HW1/src/')
 sys.path.append('../HW2/src/')
 sys.path.append('../HW3/src/')
 
-import Config as the
+import Config as config
 from Num import Num
 from Table import Table
+import copy
 
 class Sdtree:
 	def __init__(self):
@@ -17,14 +18,15 @@ class Sdtree:
 		self.val = None
 		self.stats = None
 
-	def create(self,t,yfun,pos,attr,val):
+	def create(self,t,yfun,pos=None,attr=None,val=None):
 		self._t = t
 		self._kinds={}
 		self.yfun = yfun
 		self.pos = pos
 		self.attr = attr
 		self.val = val
-		self.stats = Num.updates(t.rows, yfun)
+		self.stats = Num()
+		self.stats.updates(t.rows, yfun)
 		return
 
 	def order(self):
@@ -50,7 +52,7 @@ class Sdtree:
 		return [x['val'] for x in out]
 
 	@staticmethod
-	def grow1(above, yfun, rows, lvl, b4, pos, attr, val):
+	def grow1(above, rows, lvl, b4, pos=None, attr=None, val=None):
 		def pad():
 			# is the below statement str('| '+lvl).format("%-20s")
 			#return str.fmt("%-20s",string.rep('| ',lvl))
@@ -59,41 +61,37 @@ class Sdtree:
 		def likeAbove():
 			# what is our version of tbl.copy? Table.py does not have a copy function. Shoud we just return
 			#return tbl.copy(above._t, rows)
-			rows = copy.copy(above._t)
-			return rows
+			rows_t = copy.deepcopy(above._t)
+			return rows_t
 			
 		here = None
-		if len(rows) >= the.tree.min:
-			if lvl <= the.tree.maxDepth:
-				# This line looks unfamiliar
-				# here = (lvl==0 and above or create(likeAbove(), yfun, pos, attr, val))
+		if len(rows) >= config.tree.min:
+			if lvl <= config.tree.maxDepth:
 				if lvl==0:
 					here=above
 				else:
-					here = Sdtree().create(likeAbove(),yfun,pos,attr,val)			
+					here = Sdtree()
+					here.create(likeAbove(), above.yfun, pos, attr, val)
 				if here.stats.sd < b4:
 					if lvl > 0:
 						above._kids.append(here)
-					cuts = order(here._t, yfun)
-					cut = cuts[1]
+					cuts = here.order()
+					cut = cuts[0]
 					kids=[]
 					rows1 = []
-					for _,r in enumerate(rows):
+					for _, r in enumerate(rows):
 						val = r.cells[cut.pos] # this works because cut is a col
 						if (kids!=None) and (len(kids) > 0):
 							rows1 = kids[val]
 						rows1.append(r)
 						kids[val] = rows1
-					for val,rows1 in enumerate(kids):
+					for val, rows1 in enumerate(kids):
 						if len(rows1) < len(row):
-							grow1(here,yfun,rows1,lvl+1,here.stats.sd,cut.pos,cut.what,val)
+							grow1(here, rows1, lvl+1, here.stats.sd, cut.pos, cut.what, val)
 
 	def grow(self):
 		# ?? first line change karna hai
-		yfun = tbl[self.yfun](self._t)
-		# root = self.create(t, yfun)
-		Sdtree.grow1(self,yfun,t.rows,0,1E32)
-		return root
+		Sdtree.grow1(self, t.rows, 0, 1E32)
 
 	def tprint(self, tr, lvl=0):
 		def pad():
