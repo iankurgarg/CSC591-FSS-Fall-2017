@@ -7,6 +7,7 @@ import Config as config
 from Num import Num
 from Table import Table
 import copy
+import itertools
 
 class Sdtree:
 	def __init__(self):
@@ -99,9 +100,9 @@ class Sdtree:
 
 	def tprint(self, lvl=0):
 		def pad():
-			return '| ' + str(lvl-1)
+			return itertools.repeat('| ',lvl-1)
 		def left(x):
-			return str(x).format('%-20s')
+			return '%-20s'%(x)
 		suffix=""
 		if len(self._kids) == 0 or lvl==0:
 			suffix = str("n=%s mu=%-.2f sd=%-.2f") % (self.stats.n, self.stats.mu, self.stats.sd)
