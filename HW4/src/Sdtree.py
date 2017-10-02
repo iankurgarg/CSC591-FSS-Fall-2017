@@ -61,7 +61,8 @@ class Sdtree:
 		def pad():
 			# is the below statement str('| '+lvl).format("%-20s")
 			#return str.fmt("%-20s",string.rep('| ',lvl))
-			return str('| '+lvl).format("%-20s")
+			#return str('| '+lvl).format("%-20s")
+			return '%-20s'%(str('| '+lvl))
 
 		def likeAbove():
 			# what is our version of tbl.copy? Table.py does not have a copy function. Shoud we just return
