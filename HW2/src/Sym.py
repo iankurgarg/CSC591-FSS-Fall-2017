@@ -12,6 +12,7 @@ class Sym(Col):
 		self.most = 0
 		self.mode = None
 		self._ent = None
+		self.bins = None
 
 	def update(self, x):
 		if (isinstance(x, str)):
@@ -37,6 +38,17 @@ class Sym(Col):
 				self.update(f(x))
 		else:
 			raise ValueError('Expected List but received '+str(type(xs)))
+
+	
+	def discretize(self, x):
+		r = None
+		if not self.bins:
+			return x
+		for b in self.bins:
+			r = b.label
+			if x < b.most:
+				break
+		return r
 
 
 	def norm(self, x):

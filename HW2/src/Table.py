@@ -1,11 +1,14 @@
 import sys
 sys.path.append('../HW1/src/')
+sys.path.append('../HW3/src')
 
 from Row import Row
 from Col import Col
 from Num import Num
 from Sym import Sym
 from CSVReader import CSVReader
+from SuperRange import SuperRange
+import copy
 
 """
 Class Table. Used for representation of a csv file in a table
@@ -102,11 +105,17 @@ class Table(object):
 	def data(self, cells, old=None):
 		row = Row()
 		row.update(cells, self)
-		self.rows.append(row)
 		if old:
 			row.ID = old.ID
-
+		self.rows.append(row)
 		return row
+
+	def copy(self, _from):
+		j = Table()
+		j.header(copy.deepcopy(self.spec))
+		for r in _from:
+			j.data(copy.deepcopy(r.cells), r)
+		return j
 
 	"""
 	This function takes input a list of cells and updates columns and rows of the table
@@ -136,16 +145,53 @@ class Table(object):
 			res += col.txt +","
 		return res
 
+	def discretizeHeaders(self):
+		res = []
+		if self.spec:
+			for _, val in enumerate(self.spec):
+				res.append(val.replace("$",""))
+		return res
+
+	def discretizeRows(self, yfun=None):
+		out_table = Table()
+		out_table.header(self.discretizeHeaders())
+		if not yfun:
+			yfun = self.dom()
+
+		for head in self.X["nums"]:
+			cooked = out_table.all["columns"][head.pos]
+			def xfun(r) :
+				return r.cells[cooked.pos]
+			sr = SuperRange(self.rows, xfun, yfun)
+			cooked.bins = sr.discretize()
+			# print cooked.bins
+		for r in self.rows:
+			tmp = copy.deepcopy(r.cells)
+			for head in self.X["nums"]:
+				cooked = out_table.all["columns"][head.pos]
+				old = tmp[cooked.pos]
+				new = cooked.discretize(old)
+				tmp[cooked.pos] = new
+			out_table.data(tmp, r)
+		return out_table
 
 	"""
 	This function returns a list of dom scores for each in order using the function dom_func
 	If dom_func is None, it uses the default dom function defined in Row Class
 	"""
-	def dom(self, dom_func=None):
-		res = []
-		for row in self.rows:
-			res.append(row.dominate(self, dom_func))
-		return res
+	def dom(self):
+		res = {}
+		def new_func(r):
+			if not r.ID in res:
+				res[r.ID] = r.dominate(self)
+			return res[r.ID]
+		return new_func
+
+		# res = []
+		# def dom_func()
+		# for row in self.rows:
+		# 	res.append(row.dominate(self, dom_func))
+		# return res
 
 
 if __name__ == '__main__':
