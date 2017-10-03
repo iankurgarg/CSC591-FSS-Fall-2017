@@ -1,6 +1,6 @@
 from RangeManager import RangeManager
 from SuperRange import SuperRange
-import numpy as np
+from Random import Random
 
 
 def x(a):
@@ -10,18 +10,22 @@ def y(a):
     return a[1]
 
 def klass(z):
-    v = 2*np.random.rand()/100
+    v = 2*Random.another()/100
 
     if z < 0.2:
-        v += 0.2
+        v += 0.2 
     elif z < 0.6:
-        v += 0.6
+        v += 0.6 
     else:
-        v += 0.9
+        v += 0.9    
     return v
 
 if __name__=="__main__":
-    numbers = list(np.random.rand(100))
+    Random.rseed(2)
+
+    numbers = []
+    for _ in range(50):
+        numbers.append(Random.another())
 
     final_list = [None]*(len(numbers))
 
