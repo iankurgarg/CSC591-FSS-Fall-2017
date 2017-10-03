@@ -6,6 +6,7 @@ from Num import Num
 from Sym import Sym
 import Config as config
 from Range import Range
+from Label import Label
 from RangeManager import RangeManager
 import copy
 
@@ -48,9 +49,10 @@ class SuperRange(object):
     
     @staticmethod
     def labels(nums):
-        out = {}
+        out = []
         for i in (nums):
-            out[i] = {'most':nums[i], 'label': i}
+            l = Label(nums[i], i)
+            out.append(l)
         
         return out
 

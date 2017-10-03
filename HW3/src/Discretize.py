@@ -20,6 +20,7 @@ def klass(z):
         v += 0.9    
     return v
 
+
 if __name__=="__main__":
     Random.rseed(2)
 
@@ -42,5 +43,5 @@ if __name__=="__main__":
     s = SuperRange(final_list, x, y)
     super_ranges = s.discretize()
     print "\nWe have fewer supervised ranges."
-    for i in (super_ranges):
-        print "x", i, super_ranges[i]
+    for i, x in enumerate(super_ranges):
+        print "x", i, x
