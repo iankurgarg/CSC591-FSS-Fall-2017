@@ -187,18 +187,18 @@ class Table(object):
 			return res[r.ID]
 		return new_func
 
-		# res = []
-		# def dom_func()
-		# for row in self.rows:
-		# 	res.append(row.dominate(self, dom_func))
-		# return res
+	def rowDomScores(self, dom_func=None):
+		res = []
+		for row in self.rows:
+			res.append(row.dominate(self, dom_func))
+		return res
 
 
 if __name__ == '__main__':
 	filename = sys.argv[1]
 	tbl = Table()
 	tbl.fromCSV(filename)
-	scores = tbl.dom()
+	scores = tbl.rowDomScores()
 
 
 	sortes_scores_keys = sorted(enumerate(scores), key=lambda x: x[1])
