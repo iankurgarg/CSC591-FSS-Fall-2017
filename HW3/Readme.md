@@ -33,9 +33,19 @@ To run the code,
 
 `python src/Discretize.py`
 
-It generates random data each time and then tries to discretize it. <br />
 It uses some source files from HW1 and HW2. Those paths have been included wherever required<br />
 To ensure that it always runs, please run it from this (/HW3/) directory (using the same command above)<br />
+
+## Input Data
+It generates random data each time and then tries to discretize it. <br />
+It generates 50 data points using the `Random` Class. <br />
+Each of those numbers is mapped to a `y` value, which is calculated using `klass` function defined in `Discretize.py` It assigns one of three values (plus a random componenet) based on the `x` value.<br />
+
+## Output
+The first part of the output prints discretized ranges created using just the `x` values.<br />
+The second part of the output prints supervised discretization ranges which are calcualted using the `y` values as well. <br />
+It is observed that the number of supervised ranges are lesser as compared to number of unsupervised ranges.<br />
+
 
 ## References
 
