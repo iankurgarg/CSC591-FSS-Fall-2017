@@ -15,19 +15,23 @@ import copy
 # 		return
 
 class Branch(object):
-	_has = None
-	lst = []
+	def __init__(self):
+		self._has = None
+		self.lst = []
 
 	def member2(self, twin0):
-		for _, twin1 in enumerate(self.has):
+		if (self._has is None):
+			self.has()
+		for _, twin1 in enumerate(self._has):
 			if twin0['attr'] == twin1['attr'] and twin0['val'] == twin1['val']:
 				return True
 		return False
 
 	def delta(self, t2):
-		print "here"
 		out = []
-		for _, twin in enumerate(t2):
+		if (t2._has is None):
+			t2.has()
+		for _, twin in enumerate(t2._has):
 			if not self.member2(twin):
 				out.append((twin['attr'], twin['val']))
 		return out # list of tuples
@@ -41,6 +45,12 @@ class Branch(object):
 
 			self._has = out
 		return self._has
+
+	def copy(self):
+		c = Branch()
+		c._has = copy.deepcopy(self._has)
+		c.lst = copy.deepcopy(self.lst)
+		return c
 
 class Contrast(object):
 	def __init__(self, tr):
@@ -57,7 +67,7 @@ class Contrast(object):
 			out.append(b)
 		for _,kid in enumerate(self.tr._kids):
 			con = Contrast(kid)
-			out += con.branches1(copy.deepcopy(b))
+			out += con.branches1(b.copy())
 		return out # list of dictonaries
 
 	def branches(self):
@@ -75,18 +85,18 @@ class Contrast(object):
 				if i != j:
 					num1 = branch1.lst[-1]['_stats']
 					num2 = branch2.lst[-1]['_stats']
-					print "num1 = ", num1.mu, ", num2 = ", num2.mu
+					# print "num1 = ", num1.mu, ", num2 = ", num2.mu
 					if better(num2.mu, num1.mu):
-						print "1"
+						# print "1"
 						if not num1.same(num2):
 							inc = branch1.delta(branch2)
 							if len(inc) > 0:
-								out.append( {'i':i,'j':j,'ninc':len(inc),'muinc':num2.mu - num1.mu,'inc':inc, 'branch1':branch1.has,'mu1':num1.mu,'branch2':branch2.has,'mu2':num2.mu} )
+								out.append( {'i':i,'j':j,'ninc':len(inc),'muinc':num2.mu - num1.mu,'inc':inc, 'branch1':branch1._has,'mu1':num1.mu,'branch2':branch2._has,'mu2':num2.mu} )
 			print ""
 			# below sorted line needs correction @Ankur
-			sorted(out, key=lambda x, y : x['muinc'] < y['muinc'])
+			out = sorted(out, key=lambda x: x['muinc'])
 			print i, 'max mu', out[0]
-			sorted(out, key=lambda x, y : x['ninc'] < y['ninc'])
+			out = sorted(out, key=lambda x: x['ninc'])
 			print i, 'min inc', out[0]
 		return
 
@@ -113,7 +123,9 @@ if __name__ == '__main__':
 	con = Contrast(tree_build)
 
 	b = con.branches()
-	# print b
+	print "number of branches = ", len(b)
+	for ind, i in enumerate(b):
+		print "len of branch ", ind, " = ", len(i.lst)
 
 	plans = con.plans()
 	print plans
