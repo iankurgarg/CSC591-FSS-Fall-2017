@@ -20,5 +20,8 @@ Contains code and data files for Homework 3. Implements a Supervised and Unsuper
 ## [HW4](./HW4)
 Contains code and data files for Homework 4. Implements Regression Tree Learner.
 
+## [HW5](./HW5)
+Contains code and data files for Homework 5. Implements Contrasts Sets.
+
 ## References
 For more details about the course assignments and the projects, please visit the course webiste [here](https://txt.github.io/fss17/index)
