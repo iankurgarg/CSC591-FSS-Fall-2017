@@ -20,7 +20,7 @@ Sdtree.py - Class for Regression Tree Learner<br />
 
 ## Setup
 Code has been tested on Python 2.7.12 <br />
-If uses files from previous homeworks (1, 2 3)
+If uses files from previous homeworks (1, 2, 3)
 
 ## Usage
 To run the code,
@@ -28,7 +28,7 @@ To run the code,
 `python src/Sdtree.py data/auto.csv`
 
 Replace the path of the test file as requried <br />
-It uses some source files from HW1 and HW2. Those paths have been included wherever required<br />
+It uses some source files from HW1, HW2 and HW3. Those paths have been included wherever required<br />
 To ensure that it always runs, please run it from this (/HW4/) directory (using the same command above)<br />
 
 ## References
