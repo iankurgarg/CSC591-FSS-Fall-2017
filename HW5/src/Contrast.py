@@ -44,7 +44,7 @@ def branches(tr):
 
 def member2(twins0, twins):
 	for _, twin1 in enumerate(twins):
-		if twin0.attr == twin1.attr and twin0.val == twin1.val:
+		if twin0['attr'] == twin1['attr'] and twin0['val'] == twin1['val']:
 			return True
 	return False
 
@@ -53,7 +53,7 @@ def delta(t1, t2):
 	out = []
 	for _, twin in enumerate(t1):
 		if not member2(twin, t2):
-			out.append((twin.attr, twin.val))
+			out.append((twin['attr'], twin['val']))
 	return out # list of tuples
 
 def contrasts(branches, better):
@@ -65,15 +65,15 @@ def contrasts(branches, better):
 				num2 = branch2.lst[-1]['_stats']
 				if better(num2.mu, num1.mu):
 					print "1"
-					if not num1.same(num2):#Num.same(num1,num2): # write a static function in Num.py called same, hedges, ttest1, ttest
+					if not num1.same(num2):
 						inc = delta(branch2.has,branch1.has)
 						if len(inc) > 0:
 							out.append( {'i':i,'j':j,'ninc':len(inc),'muinc':num2.mu - num1.mu,'inc':inc, 'branch1':branch1.has,'mu1':num1.mu,'branch2':branch2.has,'mu2':num2.mu} )
 		print ""
 		# below sorted line needs correction @Ankur
-		sorted(out, key=lambda x, y : x.muinc < y.muinc)
+		sorted(out, key=lambda x, y : x['muinc'] < y['muinc'])
 		print i, 'max mu', out[0]
-		sorted(out, key=lambda x, y : x.ninc < y.ninc)
+		sorted(out, key=lambda x, y : x['ninc'] < y['ninc'])
 		print i, 'min inc', out[0]
 	return
 
@@ -100,7 +100,7 @@ if __name__ == '__main__':
 	b = branches(tree_build)
 	# print b
 
-	plans = contrasts(b, lambda x, y: x > y)
+	plans = plans(b)
 
 # need to figure out the main function like before
 # and what is the class of branches.
