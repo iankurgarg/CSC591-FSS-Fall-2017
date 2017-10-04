@@ -15,19 +15,36 @@ import copy
 # 		return
 
 class Branch(object):
-	has = None
+	_has = None
 	lst = []
 
-def has(branch):
-	out = []
-	for i in range(1,len(branch.lst)):
-		step = branch.lst[i]
-		out.append({'attr':step['attr'], 'val':step['val']})
-	return out
+	def member2(self, twin0):
+		for _, twin1 in enumerate(self.has):
+			if twin0['attr'] == twin1['attr'] and twin0['val'] == twin1['val']:
+				return True
+		return False
+
+	def delta(self, t2):
+		print "here"
+		out = []
+		for _, twin in enumerate(t2):
+			if not self.member2(twin):
+				out.append((twin['attr'], twin['val']))
+		return out # list of tuples
+
+	def has(self):
+		if (self._has is None):
+			out = []
+			for i in range(len(self.lst)):
+				step = self.lst[i]
+				out.append({'attr':step['attr'], 'val':step['val']})
+
+			self._has = out
+		return self._has
 
 def have(branches):
 	for _, branch in enumerate(branches): #should be a list
-		branch.has = has(branch)
+		branch.has()
 	return branches
 
 def branches1(tr, out, b):
@@ -42,20 +59,6 @@ def branches1(tr, out, b):
 def branches(tr):
 	return have(branches1(tr,[],Branch()))
 
-def member2(twins0, twins):
-	for _, twin1 in enumerate(twins):
-		if twin0['attr'] == twin1['attr'] and twin0['val'] == twin1['val']:
-			return True
-	return False
-
-def delta(t1, t2):
-	print "here"
-	out = []
-	for _, twin in enumerate(t1):
-		if not member2(twin, t2):
-			out.append((twin['attr'], twin['val']))
-	return out # list of tuples
-
 def contrasts(branches, better):
 	for i, branch1 in enumerate(branches):
 		out = []
@@ -63,10 +66,11 @@ def contrasts(branches, better):
 			if i != j:
 				num1 = branch1.lst[-1]['_stats']
 				num2 = branch2.lst[-1]['_stats']
+				print "num1 = ", num1.mu, ", num2 = ", num2.mu
 				if better(num2.mu, num1.mu):
 					print "1"
 					if not num1.same(num2):
-						inc = delta(branch2.has,branch1.has)
+						inc = branch1.delta(branch2)
 						if len(inc) > 0:
 							out.append( {'i':i,'j':j,'ninc':len(inc),'muinc':num2.mu - num1.mu,'inc':inc, 'branch1':branch1.has,'mu1':num1.mu,'branch2':branch2.has,'mu2':num2.mu} )
 		print ""
@@ -97,6 +101,7 @@ if __name__ == '__main__':
 	
 	tree_build = Sdtree(discretized_table, yfun=discretized_table.dom())
 	tree_build.grow()
+	tree_build.treePrint()
 	b = branches(tree_build)
 	# print b
 
