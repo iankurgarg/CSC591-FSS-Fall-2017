@@ -2,6 +2,9 @@ import math
 import random
 
 
+"""
+Class to generate Random numbers
+"""
 class Random:
 	seed0 = 10013
 	seed = seed0
@@ -14,6 +17,7 @@ class Random:
 		Random.seed = (Random.multipler * Random.seed) % Random.modulus
 		return Random.seed / Random.modulus
 
+	# updates the seed
 	@staticmethod
 	def rseed(n):
 		if n:
@@ -22,10 +26,12 @@ class Random:
 			Random.seed = Random.seed0
 		Random.randomtable = None
 
+	# initializes a new randomly selected seed
 	@staticmethod
 	def system():
 		Random.rseed(random.uniform(0,1)*Random.modulus)
 
+	# This function generates next random number in the sequence
 	@staticmethod
 	def another():
 		if Random.randomtable is None:

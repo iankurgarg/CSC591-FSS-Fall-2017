@@ -8,6 +8,9 @@ import Config as config
 from Range import Range
 
 
+"""
+Class for unsupervised discretization
+"""
 class RangeManager(object):
     def __init__(self):
         self.now = None
@@ -37,6 +40,7 @@ class RangeManager(object):
         self.enough = math.pow(self.size, self.m)
         self.epsilon = self.nums.sd * self.cohen
     
+    # Discretizes given list. Returns ranges
     def discretize(self, t, x=None):
         if (x is None):
             x = lambda y: y

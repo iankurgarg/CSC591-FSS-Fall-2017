@@ -1,5 +1,8 @@
 from Sample import Sample
 
+"""
+Class to store information about a range
+"""
 class Range(object):
 	def __init__(self):
 		self._all = Sample()

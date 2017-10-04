@@ -2,12 +2,16 @@ from Num import Num
 import ID
 
 
+"""
+Class to represent a row of a table
+"""
 class Row(object):
 	def __init__(self):
 		self.ID = ID.create()
 		self.cells = []
 
 
+	# This function updates the cells of the row for a given table and appends the row to the table
 	def update(self, cells, table):
 		self.cells = cells[:]
 		assert len(cells) == len(table.all['columns'])
@@ -15,6 +19,7 @@ class Row(object):
 		for i, col in enumerate(table.all['columns']):
 			col.update(cells[i])
 
+	# Calculates distance between 2 rows based on a given table
 	def distance(self, row1, row2, table):
 		dist = 0
 		N = 1e-32
@@ -36,6 +41,7 @@ class Row(object):
 
 		return (dist**p)/(N**p)
 
+	# Dominate function to check domination between two rows for a given table
 	def dominate1(self, row1, row2, table):
 		e = 2.71828
 		n = len(table.goals)
@@ -54,6 +60,7 @@ class Row(object):
 		else:
 			return False
 
+	# dominate function to check dominate score of current row for given table
 	def dominate(self, table, func=None):
 		if (func == None):
 			func = self.dominate1

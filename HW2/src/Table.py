@@ -145,6 +145,10 @@ class Table(object):
 			res += col.txt +","
 		return res
 
+	"""
+	This function transforms the headers of the table from Num to Sym.
+	Used when discretizing the numeric columns of a table
+	"""
 	def discretizeHeaders(self):
 		res = []
 		if self.spec:
@@ -152,6 +156,11 @@ class Table(object):
 				res.append(val.replace("$",""))
 		return res
 
+	"""
+	This function uses SuperRange to first create bins for each Numeric Colum of the table
+	Then it uses those bins to discretize each row for each such column.
+	It returns a new table copy and doesn't modify existing rows.
+	"""
 	def discretizeRows(self, yfun=None):
 		out_table = Table()
 		out_table.header(self.discretizeHeaders())
@@ -176,8 +185,7 @@ class Table(object):
 		return out_table
 
 	"""
-	This function returns a list of dom scores for each in order using the function dom_func
-	If dom_func is None, it uses the default dom function defined in Row Class
+	This function returns a dom function (which uses the dominate from Row Class)
 	"""
 	def dom(self):
 		res = {}
@@ -187,6 +195,10 @@ class Table(object):
 			return res[r.ID]
 		return new_func
 
+	"""
+	This function returns a list of dom scores for each in order using the function dom_func
+	If dom_func is None, it uses the default dom function defined in Row Class
+	"""
 	def rowDomScores(self, dom_func=None):
 		res = []
 		for row in self.rows:

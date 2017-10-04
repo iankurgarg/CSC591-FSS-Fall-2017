@@ -4,6 +4,9 @@ from Col import Col
 import numpy as np
 
 
+"""
+Class to represent a Symbolic Column. Inherits Col Class
+"""
 class Sym(Col):
 
 	def __init__(self):
@@ -14,6 +17,7 @@ class Sym(Col):
 		self._ent = None
 		self.bins = None
 
+	# Updates the column with a given value
 	def update(self, x):
 		if (isinstance(x, str)):
 			self.n += 1
@@ -29,6 +33,7 @@ class Sym(Col):
 		else:
 			raise ValueError('Expected String x but received '+str(type(x)))
 
+	# Updates the column with multiple values. Applies function if given
 	def updates(self, xs, f=None):
 		if f is None:
 			f = lambda x: x
@@ -39,7 +44,7 @@ class Sym(Col):
 		else:
 			raise ValueError('Expected List but received '+str(type(xs)))
 
-	
+	# This function finds a label for a given value based on the stored bins
 	def discretize(self, x):
 		r = None
 		if not self.bins:
@@ -50,13 +55,14 @@ class Sym(Col):
 				break
 		return r
 
-
+	# Calculates norm of a new value based on current statistics of the column
 	def norm(self, x):
 		if (isinstance(x, str)):
 			return x
 		else:
 			raise ValueError('Expected String but received '+str(type(x)))
 	
+	# Calcuales entropy of the column and returns it
 	def ent(self):
 		if (self._ent is None):
 			e = 0
@@ -66,6 +72,7 @@ class Sym(Col):
 		
 		return self._ent
 
+	# Calculates distance between two Sym values
 	def distance(self, x, y):
 		if (isinstance(x, str) and isinstance(y, str)):
 			if (x == y):

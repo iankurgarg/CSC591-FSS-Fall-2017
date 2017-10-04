@@ -10,8 +10,8 @@ from Label import Label
 from RangeManager import RangeManager
 import copy
 
+# Class for supervised discretization of data
 class SuperRange(object):
-
     def __init__(self, things, x, y, nump=True, lessp=True):
         self.x = x;
         self.y = y;
