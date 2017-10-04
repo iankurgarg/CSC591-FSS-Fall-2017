@@ -79,39 +79,35 @@ class CSVReader(object):
 
 	# Main function to parse file. To be called from outside the class
 	def parse(self):
-		start_time = time()
-		f = open(self.path)
-		lines = f.readlines()
-		i = 0
+		with open(self.path) as f:
+			lines = f.readlines()
+			i = 0
 
-		l = self.cleanupLine(lines[i])
-		
-		if l[-1] == config.sep:
-			l = l+lines[i+1]
-			i += 1
-		
-		self.parseHeader(l)
-
-		if self.columns:
-			self.output.append(self.columns)
-
-		# Skipping Header Line
-		i += 1
-		
-		while i < len(lines):
 			l = self.cleanupLine(lines[i])
-			if l[-1] == ',':
-				l = l + lines[i+1]
+			
+			if l[-1] == config.sep:
+				l = l+lines[i+1]
 				i += 1
-			row = self.parseRow(l)
-			if row:
-				self.output.append(row)
-			else:
-				print 'error: Invalid Line:'+str(i+1)+' Skipping'
+			
+			self.parseHeader(l)
+
+			if self.columns:
+				self.output.append(self.columns)
+
+			# Skipping Header Line
 			i += 1
-		f.close()
-		end_time = time() - start_time
-		print "File Processed. Time Taken: ", end_time, " seconds"
+			
+			while i < len(lines):
+				l = self.cleanupLine(lines[i])
+				if l[-1] == ',':
+					l = l + lines[i+1]
+					i += 1
+				row = self.parseRow(l)
+				if row:
+					self.output.append(row)
+				else:
+					print 'CSVReader.parse: Invalid Line at:'+str(i+1)+' Skipping'
+				i += 1
 
 
 if __name__ == '__main__':
@@ -119,8 +115,11 @@ if __name__ == '__main__':
 	parser.add_argument('filename', metavar='path', type=str, help='path to the file to be processed')
 	args = parser.parse_args()
 
+	start_time = time()
 	reader = CSVReader(args.filename)
 	reader.parse()
+	end_time = time() - start_time
+	print "File Processed. Time Taken: ", end_time, " seconds"
 
 	for i in reader.output:
 		print i

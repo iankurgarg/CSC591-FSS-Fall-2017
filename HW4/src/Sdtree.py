@@ -4,10 +4,12 @@ sys.path.append('../HW2/src/')
 sys.path.append('../HW3/src/')
 
 import Config as config
+from SuperRange import SuperRange
 from Num import Num
 from Table import Table
 import copy
-import itertools
+
+
 
 class Sdtree:
 	def __init__(self):
@@ -19,7 +21,7 @@ class Sdtree:
 		self.val = None
 		self.stats = None
 
-	def create(self,t,yfun,pos=None,attr=None,val=None):
+	def create(self, t, yfun, pos=None, attr=None, val=None):
 		self._t = t
 		self._kinds={}
 		self.yfun = yfun
@@ -43,7 +45,10 @@ class Sdtree:
 			for _, row in enumerate(self._t.rows):
 				x = row.cells[col['pos']]
 				col['n'] = col['n'] + 1
-				a = Num()
+				if (x in col['nums']):
+					a = col['nums'][x]
+				else:
+					a = Num()
 				a.update(y(row))
 				col['nums'][x] = a
 				
@@ -58,86 +63,62 @@ class Sdtree:
 
 	@staticmethod
 	def grow1(above, rows, lvl, b4, pos=None, attr=None, val=None):
-		def pad():
-			# is the below statement str('| '+lvl).format("%-20s")
-			#return str.fmt("%-20s",string.rep('| ',lvl))
-			#return str('| '+lvl).format("%-20s")
-			return '%-20s'%(str('| '+lvl))
-
-		def likeAbove():
-			# what is our version of tbl.copy? Table.py does not have a copy function. Shoud we just return
-			#return tbl.copy(above._t, rows)
-			rows_t = copy.deepcopy(above._t)
-			return rows_t
-			
-		here = None
-		if len(rows) >= config.tree['min']:
-			if lvl <= config.tree['maxDepth']:
-				if lvl==0:
-					here=above
+		if len(rows) >= 2:
+			if lvl <= 10:
+				if(lvl == 0):
+					here = above
 				else:
 					here = Sdtree()
-					here.create(likeAbove(), above.yfun, pos, attr, val)
+					here.create(above._t.copy(rows), above.yfun, pos, attr, val)
 				if here.stats.sd < b4:
 					if lvl > 0:
 						above._kids.append(here)
 					cuts = here.order()
 					cut = cuts[0]
-					kids={}
-					rows1 = []
+					kids = {}
 					for _, r in enumerate(rows):
-						val = r.cells[cut['pos']] # this works because cut is a col
-						if (kids!=None) and (len(kids) > 0 and val in kids):
-							rows1 = kids[val]
+						val = r.cells[cut['pos']]
+						rows1 = kids.get(val) if val in kids else []
 						rows1.append(r)
-						kids[val] = rows1
-					for val, rows1 in enumerate(kids):
+						kids[val] = (rows1)
+					for val, rows1 in kids.items():
 						if len(rows1) < len(rows):
-							Sdtree.grow1(here, rows1, lvl+1, here.stats.sd, cut['pos'], cut['what'], val)
+							Sdtree.grow1(here, rows1, lvl + 1, here.stats.sd, cut['pos'], cut['what'], val)
+
 
 	def grow(self):
-		# ?? first line change karna hai
 		Sdtree.grow1(self, self._t.rows, 0, 1E32)
 
 	def tprint(self, lvl=0):
 		def pad():
-			return itertools.repeat('| ',lvl-1)
+			return "| " * (lvl)
+
 		def left(x):
-			return '%-20s'%(x)
-		suffix=""
+			return "%-20s" % x
+
+		suffix = ""
 		if len(self._kids) == 0 or lvl==0:
-			suffix = str("n=%s mu=%-.2f sd=%-.2f") % (self.stats.n, self.stats.mu, self.stats.sd)
+			suffix = "n=%s mu=%-.2f sd=%-.2f" % (self.stats.n, self.stats.mu, self.stats.sd)
 		if lvl == 0:
 			print "\n" + suffix
 		else:
-			print left(pad())+self.attr+"="+self.val+"\t:"+suffix
-		for j in range(1,len(self._kids)):
-			tprint(self._kids[j],lvl+1)
-		return
+			print left("{}{} = {}".format(pad(), str(self.attr) or "", str(self.val) or "")), '\t:\t\t', suffix
+		for j in range(len(self._kids)):
+			self._kids[j].tprint(lvl+1)
 
-	def leaf(self, cells, lvl=0):
-		for j,kid in enumerate(self._kids):
-			pos,val = kid.pos, kid.val
-			if cells[kid.pos] == kid.val:
-				# don't know where this bins is coming from
-				return leaf(kid, cells, bins,lvl+1)
-		return self
 
 if __name__=="__main__":
-	# Main function call to run the script
 	filename = sys.argv[1]
-	tree_build = Sdtree()
 	tbl = Table()
 	tbl.fromCSV(filename)
 	print tbl.colsToString()
-	# print "something here"
-	yfunc = lambda y: y.cells[3]
+
+	tbl2 = tbl.discretizeRows()
+	print tbl2.colsToString()
 	
-	tree_build.create(tbl, yfunc)
+	tree_build = Sdtree()
+	tree_build.create(tbl2, yfun=tbl2.dom())
 	tree_build.grow()
 	tree_build.tprint()
 
-
-
-	#tree_build.create()
 	
