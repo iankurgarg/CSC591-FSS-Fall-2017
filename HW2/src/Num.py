@@ -3,6 +3,7 @@ sys.path.append('../HW1/src/')
 
 import Config as config
 from Col import Col
+import math
 
 """
 Class to represent a Numeric Column. Inherits Col Class
@@ -95,17 +96,18 @@ class Num(Col):
 		sp = (nom/denom)**(0.5)
 		g = abs(self.mu - j.mu) / sp
 		c = 1 - 3.0 / (4*(self.n + j.n - 2) - 1) # handle small samples
-		return g * c > config.num.small # Table9, https://goo.gl/jNNCHH says small,medium=0.38,1.0
+		return g * c > config.num['small']
 
-	def ttest(self, j): # Debugged using https://goo.gl/CRl1Bz
-		t  = (self.mu - j.mu) / ((max(10^-64, (self.sd**2)/self.n + (j.sd**2)/j.n ))**(0.5))
+	def ttest(self, j):
+		t  = (self.mu - j.mu) / ((max(1E-64, (self.sd**2)/self.n + (j.sd**2)/j.n ))**(0.5))
 		a  = self.sd**2/self.n
 		b  = j.sd**2/j.n
-		df = (a + b)**2 / (10^-64 + (a**2)/(self.n-1) + (b**2)/(j.n - 1))
-		c  = ttest1(math.floor( df + 0.5 ), config.num['first'], config.num['last'], 
+		df = (a + b)**2 / (1E-64 + (a**2)/(self.n-1) + (b**2)/(j.n - 1))
+		c  = Num.ttest1(math.floor( df + 0.5 ), config.num['first'], config.num['last'], 
 				config.num['criticals'][config.num['conf']])
 		return abs(t) > c
 
+	@staticmethod
 	def ttest1(df, first, last, crit):
 		if df <= first:
 			return crit[first] 
