@@ -31,6 +31,10 @@ Replace the path of the test file as requried <br />
 It uses some source files from HW1, HW2 and HW3. Those paths have been included wherever required<br />
 To ensure that it always runs, please run it from this (/HW4/) directory (using the same command above)<br />
 
+## Config
+The parameters: The `maxDepth` of the tree and `min` elements in the leaf nodes, are defined in `../HW1/Config.py` <br />
+They have been set to `maxDepth = 10` and `min = 2`. They can be changed as required in that file.
+
 ## References
 
 More details about the instructions can be found at [Homeworks](https://txt.github.io/fss17/homeworks)

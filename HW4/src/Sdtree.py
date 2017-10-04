@@ -5,6 +5,7 @@ sys.path.append('../HW3/src/')
 
 import Config as config
 from Num import Num
+from Random import Random
 from Table import Table
 import copy
 
@@ -108,10 +109,15 @@ class SdtreeUtil(object):
 
 
 if __name__=="__main__":
+	Random.rseed(2)
 	filename = sys.argv[1]
 	tbl = Table()
 	tbl.fromCSV(filename)
 	discretized_table = tbl.discretizeRows()
+
+	for _, head in enumerate(discretized_table.X['columns']):
+		if (head.bins):
+			print len(head.bins), head.txt
 	
 	tree_build = Sdtree(discretized_table, yfun=discretized_table.dom())
 	tree_build.grow()
