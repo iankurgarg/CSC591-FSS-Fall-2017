@@ -42,56 +42,63 @@ class Branch(object):
 			self._has = out
 		return self._has
 
-def have(branches):
-	for _, branch in enumerate(branches): #should be a list
-		branch.has()
-	return branches
+class Contrast(object):
+	def __init__(self, tr):
+		self.tr = tr
+		self._branches = None
 
-def branches1(tr, out, b):
-	if tr.attr:
-		b.lst.append({'attr': tr.attr,'val' : tr.val, '_stats': tr.stats})
-	if len(b.lst) > 0:
-		out.append(b)
-	for _,kid in enumerate(tr._kids):
-		branches1(kid, out, copy.deepcopy(b))
-	return out # list of dictonaries
-
-def branches(tr):
-	return have(branches1(tr,[],Branch()))
-
-def contrasts(branches, better):
-	for i, branch1 in enumerate(branches):
+	def branches1(self, b=None):
 		out = []
-		for j, branch2 in enumerate(branches):
-			if i != j:
-				num1 = branch1.lst[-1]['_stats']
-				num2 = branch2.lst[-1]['_stats']
-				print "num1 = ", num1.mu, ", num2 = ", num2.mu
-				if better(num2.mu, num1.mu):
-					print "1"
-					if not num1.same(num2):
-						inc = branch1.delta(branch2)
-						if len(inc) > 0:
-							out.append( {'i':i,'j':j,'ninc':len(inc),'muinc':num2.mu - num1.mu,'inc':inc, 'branch1':branch1.has,'mu1':num1.mu,'branch2':branch2.has,'mu2':num2.mu} )
-		print ""
-		# below sorted line needs correction @Ankur
-		sorted(out, key=lambda x, y : x['muinc'] < y['muinc'])
-		print i, 'max mu', out[0]
-		sorted(out, key=lambda x, y : x['ninc'] < y['ninc'])
-		print i, 'min inc', out[0]
-	return
+		if not b:
+			b = Branch()
+		if self.tr.attr:
+			b.lst.append({'attr': self.tr.attr,'val' : self.tr.val, '_stats': self.tr.stats})
+		if len(b.lst) > 0:
+			out.append(b)
+		for _,kid in enumerate(self.tr._kids):
+			con = Contrast(kid)
+			out += con.branches1(copy.deepcopy(b))
+		return out # list of dictonaries
 
-def more(x,y):
-	return x > y
+	def branches(self):
+		out = self.branches1()
+		for _, branch in enumerate(out): #should be a list
+			branch.has()
 
-def less(x,y):
-	return x < y
+		self._branches = out
+		return out
 
-def plans(branches):
-	return contrasts(branches, more)
+	def contrasts(self, better):
+		for i, branch1 in enumerate(self._branches):
+			out = []
+			for j, branch2 in enumerate(self._branches):
+				if i != j:
+					num1 = branch1.lst[-1]['_stats']
+					num2 = branch2.lst[-1]['_stats']
+					print "num1 = ", num1.mu, ", num2 = ", num2.mu
+					if better(num2.mu, num1.mu):
+						print "1"
+						if not num1.same(num2):
+							inc = branch1.delta(branch2)
+							if len(inc) > 0:
+								out.append( {'i':i,'j':j,'ninc':len(inc),'muinc':num2.mu - num1.mu,'inc':inc, 'branch1':branch1.has,'mu1':num1.mu,'branch2':branch2.has,'mu2':num2.mu} )
+			print ""
+			# below sorted line needs correction @Ankur
+			sorted(out, key=lambda x, y : x['muinc'] < y['muinc'])
+			print i, 'max mu', out[0]
+			sorted(out, key=lambda x, y : x['ninc'] < y['ninc'])
+			print i, 'min inc', out[0]
+		return
 
-def monitors(branches):
-	return contrasts(branches, less)
+	def plans(self):
+		def more(x,y):
+			return x > y
+		return self.contrasts(more)
+
+	def monitors(self):
+		def less(x,y):
+			return x < y
+		return self.contrasts(less)
 
 if __name__ == '__main__':
 	filename = sys.argv[1]
@@ -102,10 +109,14 @@ if __name__ == '__main__':
 	tree_build = Sdtree(discretized_table, yfun=discretized_table.dom())
 	tree_build.grow()
 	tree_build.treePrint()
-	b = branches(tree_build)
+
+	con = Contrast(tree_build)
+
+	b = con.branches()
 	# print b
 
-	plans = plans(b)
+	plans = con.plans()
+	print plans
 
 # need to figure out the main function like before
 # and what is the class of branches.
