@@ -1,5 +1,7 @@
 import sys
+sys.path.append('../HW1/src/')
 
+import Config as config
 from Col import Col
 
 """
@@ -83,6 +85,41 @@ class Num(Col):
 
 		else:
 			raise ValueError('Expected Number x but received '+str(type(x)))
+
+	def same(self, j):
+		return not(self.hedges(j) and self.ttest(j))
+
+	def hedges(self, j):
+		nom = (self.n - 1)*self.sd**2 + (j.n - 1)*j.sd**2
+		denom = (self.n - 1) + (j.n - 1)
+		sp = (nom/denom)**(0.5)
+		g = abs(self.mu - j.mu) / sp
+		c = 1 - 3.0 / (4*(self.n + j.n - 2) - 1) # handle small samples
+		return g * c > config.num.small # Table9, https://goo.gl/jNNCHH says small,medium=0.38,1.0
+
+	def ttest(self, j): # Debugged using https://goo.gl/CRl1Bz
+		t  = (self.mu - j.mu) / ((max(10^-64, (self.sd**2)/self.n + (j.sd**2)/j.n ))**(0.5))
+		a  = self.sd**2/self.n
+		b  = j.sd**2/j.n
+		df = (a + b)**2 / (10^-64 + (a**2)/(self.n-1) + (b**2)/(j.n - 1))
+		c  = ttest1(math.floor( df + 0.5 ), config.num['first'], config.num['last'], 
+				config.num['criticals'][config.num['conf']])
+		return abs(t) > c
+
+	def ttest1(df, first, last, crit):
+		if df <= first:
+			return crit[first] 
+		elif  df >= last:
+			return crit[last]
+		else:
+			n1 = first
+			while n1 < last:
+				n2=n1*2
+				if df >= n1 and df <= n2:
+					old = crit[n1]
+					new = crit[n2]
+					return old + (new-old) * (df-n1)/(n2-n1)
+				n1 = n1*2
 
 	def __str__(self):
 		return "n = " + str(self.n) + ", mu = " + str(self.mu) + ", m2 = " + str(self.m2) + ", sd = " + str(self.sd) + ", max = " + str(self.max) + ", min = " + str(self.min)
