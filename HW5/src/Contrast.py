@@ -85,19 +85,17 @@ class Contrast(object):
 				if i != j:
 					num1 = branch1.lst[-1]['_stats']
 					num2 = branch2.lst[-1]['_stats']
-					# print "num1 = ", num1.mu, ", num2 = ", num2.mu
 					if better(num2.mu, num1.mu):
-						# print "1"
 						if not num1.same(num2):
 							inc = branch1.delta(branch2)
 							if len(inc) > 0:
 								out.append( {'i':i,'j':j,'ninc':len(inc),'muinc':num2.mu - num1.mu,'inc':inc, 'branch1':branch1._has,'mu1':num1.mu,'branch2':branch2._has,'mu2':num2.mu} )
-			print ""
-			# below sorted line needs correction @Ankur
-			out = sorted(out, key=lambda x: x['muinc'])
-			print i, 'max mu', out[0]
-			out = sorted(out, key=lambda x: x['ninc'])
-			print i, 'min inc', out[0]
+			if (len(out) > 0):
+				print ""
+				out = sorted(out, key=lambda x: x['muinc'])
+				print i, 'max mu', out[0]
+				out = sorted(out, key=lambda x: x['ninc'])
+				print i, 'min inc', out[0]
 		return
 
 	def plans(self):
@@ -124,11 +122,10 @@ if __name__ == '__main__':
 
 	b = con.branches()
 	print "number of branches = ", len(b)
-	for ind, i in enumerate(b):
-		print "len of branch ", ind, " = ", len(i.lst)
+	# for ind, i in enumerate(b):
+	# 	print "len of branch ", ind, " = ", len(i.lst)
 
-	plans = con.plans()
-	print plans
+	con.monitors()
 
 # need to figure out the main function like before
 # and what is the class of branches.
