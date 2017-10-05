@@ -1,18 +1,13 @@
 import sys
 sys.path.append('../HW1/src/')
 sys.path.append('../HW2/src/')
-sys.path.append('../HW3/src/')
 sys.path.append('../HW4/src/')
 
 import Config as config
 from Num import Num
 from Table import Table
-from Sdtree import Sdtree # I don't think this is used
+from Sdtree import Sdtree
 import copy
-
-# class Contrast: No class structure required
-# 	def __init__(self):
-# 		return
 
 class Branch(object):
 	def __init__(self):
@@ -68,11 +63,11 @@ class Contrast(object):
 		for _,kid in enumerate(self.tr._kids):
 			con = Contrast(kid)
 			out += con.branches1(b.copy())
-		return out # list of dictonaries
+		return out
 
 	def branches(self):
 		out = self.branches1()
-		for _, branch in enumerate(out): #should be a list
+		for _, branch in enumerate(out):
 			branch.has()
 
 		self._branches = out
@@ -122,12 +117,5 @@ if __name__ == '__main__':
 
 	b = con.branches()
 	print "number of branches = ", len(b)
-	# for ind, i in enumerate(b):
-	# 	print "len of branch ", ind, " = ", len(i.lst)
 
 	con.monitors()
-
-# need to figure out the main function like before
-# and what is the class of branches.
-# I think it is Num because we are using branch1[-1]._stats
-# _stats makes sence only in Nums
