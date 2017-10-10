@@ -5,7 +5,7 @@ sep = ","
 comment = "#"
 sample = {'most': 512 }
 chop = { 'm' : 0.5, 'cohen' : 0.2 }
-tree = { 'ish' : 1.00, 'min' : 2, 'maxDepth' : 10 }
+tree = { 'ish' : 1.00, 'min' : 10, 'maxDepth' : 10 }
 num = { 'conf' : 95, 'small' : 0.38, 'first' : 3, 'last' : 96, 
         'criticals' : {
               95 : { 3 : 3.182, 6 : 2.447, 12 : 2.179, 24 : 2.064, 48 : 2.011, 96 : 1.985},

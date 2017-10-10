@@ -13,11 +13,14 @@ class Sample:
 
 	def update(self, x):
 		self.n = self.n + 1
-		rand = Random.another()
+
 		if len(self.all) < self.most:
 			self.all.append(x)
-		elif rand < float(len(self.all))/self.n:
-			self.all[int(math.floor(rand*len(self.all)))] = x
+		else:
+			rand = Random.another()
+			if rand < float(len(self.all))/self.n:
+				print int(rand*len(self.all))
+				self.all[int(rand*len(self.all))] = x
 
 	def updates(self, t, f=None):
 		if f is None:
