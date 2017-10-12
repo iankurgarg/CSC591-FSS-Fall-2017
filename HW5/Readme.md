@@ -29,6 +29,9 @@ To run the code,
 
 `python src/Contrasts.py data/auto.csv`
 
+<b>Note:</b> For updating any parameters for the trees or statistical tests, please take a look at the `../HW1/Config.py`. It defines the various parameters used by various parts of the code. <br />
+The nomenclature of such parameters has been kept same as the original lua code. 
+
 Replace the path of the test file as requried <br />
 It uses some source files from HW1, HW2, HW3 and HW4. Those paths have been included wherever required<br />
 To ensure that it always runs, please run it from this (/HW5/) directory (using the same command above)<br />
