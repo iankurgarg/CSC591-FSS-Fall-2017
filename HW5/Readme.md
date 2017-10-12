@@ -1,5 +1,5 @@
 [Back](../)
-# HW 5 - Not Completed
+# HW 5
 
 ## Description
 
