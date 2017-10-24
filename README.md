@@ -23,5 +23,8 @@ Contains code and data files for Homework 4. Implements Regression Tree Learner.
 ## [HW5](./HW5)
 Contains code and data files for Homework 5. Implements Contrasts Sets.
 
+## [Essay](./Essay)
+Essay as per instructions [here](https://txt.github.io/fss17/essay)
+
 ## References
 For more details about the course assignments and the projects, please visit the course webiste [here](https://txt.github.io/fss17/index)
