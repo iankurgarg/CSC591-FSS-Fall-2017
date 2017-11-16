@@ -9,7 +9,7 @@ import numpy as np
 inputDF,df = data_preprocessing.preprocess_data()
 
 clf = RandomForestClassifier(class_weight="balanced", n_jobs=-1)
-kf = KFold(n_splits=5)
+kf = KFold(n_splits=10)
 
 cvscores = []
 for train,test in kf.split(inputDF):
@@ -22,9 +22,9 @@ for train,test in kf.split(inputDF):
     scores = f1_score(test_output, prediction, average=None)
     print scores
     cvscores.append(scores)
-
+return cvscores
 print np.mean(cvscores)
 
 print '\tP1\t\tP2\t\tP3\t\tP4\tP5'
 print '\t',np.mean(cvscores,axis=0)
-# print cvscores
+print cvscores

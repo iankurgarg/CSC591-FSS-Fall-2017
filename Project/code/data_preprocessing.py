@@ -77,7 +77,7 @@ class DataProcessor(object):
         inputDF = sparse.hstack((dummy_sparse,countVector),format="csr")
         inputDF = sparse.hstack((other_features,countVector),format="csr")
         print "created a sparse matrix of all features"
-        return inputDF
+        return inputDF, data
 
     def fit_transform(self, df):
         self.fit(df)
