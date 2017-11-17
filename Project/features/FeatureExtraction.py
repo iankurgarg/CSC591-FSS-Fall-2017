@@ -4,8 +4,17 @@ from datetime import datetime, timedelta
 from time import time
 from sklearn.model_selection import train_test_split
 
+from individual.temporal import *
+from individual.product import *
+from individual.author import *
 
-def train_test_split(file = '../data/total_fixed.csv', ratio=0.20):
+
+# Performs Train-test split. Called just once. To Keep out the test data
+# To reproduce the results exactly, keep random state = 42
+# Expects the path of the file
+# returns train and test data (including the y column)
+# Also saves output to files
+def split_data(file = '../data/total_fixed.csv', ratio=0.20):
     df = pd.read_csv(file, parse_dates=['Changed', 'Opened'])
     cols = df.columns
 
@@ -22,129 +31,106 @@ def train_test_split(file = '../data/total_fixed.csv', ratio=0.20):
     print "Test Shape = ", X_test.shape
 
     # Save Splitted data to disk
-    X_train.to_csv('../data/train.csv', index=False)
-    X_test.to_csv('../data/test.csv', index=False)
+    X_train.to_csv('../data/train-test-split/train.csv', index=False)
+    X_test.to_csv('../data/train-test-split/test.csv', index=False)
     return X_train, X_test
 
 
-# severity_levels = ['enhancement', 'trivial', 'minor', 'normal', 'major', 'critical', 'blocker']
-from individual.temporal import *
-from individual.product import *
-from individual.author import *
+# Prepares all types features and saves them in individual files one for each category
+# For both train and test data. Expects both as input as dataframe
+def prepare_all_features(X_train, X_test):
+    # TEMORAL FEATURES
 
-X_train= pd.read_csv('../data/train.csv', parse_dates=['Changed', 'Opened'])
-X_test = pd.read_csv('../data/test.csv', parse_dates=['Changed', 'Opened'])
+    tf = TemporalFeatures()
+    temporal_train_data = tf.fit_transform(X_train)
+    temoral_test_data = tf.transform(X_test)
 
+    print "Temporal Features Generated"
 
-# TEMORAL FEATURES
-temporal_train_data = generate_temporal_features(X_train)
-temoral_test_data = generate_temporal_features(X_test)
+    # Concatenating temporal data features with existing data
+    train_data_with_temporal = pd.concat([data, temporal_train_data], axis=1)
+    test_data_with_temporal = pd.concat([X_test, temoral_test_data], axis=1)
 
-print temporal_train_data.shape
-print temoral_test_data.shape
-
-# Concatenating temporal data features with existing data
-train_data_with_temporal = pd.concat([data, temporal_train_data], axis=1)
-test_data_with_temporal = pd.concat([X_test, temoral_test_data], axis=1)
-
-# Save data with temporal features
-train_data_with_temporal.to_csv('../data/train_data_with_temporal.csv', index=False)
-test_data_with_temporal.to_csv('../data/test_data_with_temporal.csv', index=False)
+    # Save data with temporal features
+    train_data_with_temporal.to_csv('../data/individual_features/train_data_with_temporal.csv', index=False)
+    test_data_with_temporal.to_csv('../data/individual_features/test_data_with_temporal.csv', index=False)
 
 
-# ### Author Realted Feature Generation
-print len(set(data['Assignee']))
-print data.shape
+    # AUTHOR REALTED FEATURES
+    af = AuthorFeatures()
+    author_train_data = af.fit_transform(X_train)
+    author_test_data = af.transform(X_test)
 
+    print "Author Features Generated"
+    # Save data with temporal features
+    author_train_data.to_csv('../data/individual_features/train_author_features.csv', index=False)
+    author_test_data.to_csv('../data/individual_features/test_author_features.csv', index=False)
 
-priority_levels = {'P1': 1, 'P2': 2, 'P3': 3, 'P4': 4, 'P5': 5}
+    # Product Features
+    # Generating Product related features for Train Data
+    pf = ProductFeatures()
+    prod_features = pf.fit_transform(X_train, 'Product')
+    prod_features.to_csv('../data/individual_features/train_prod_features.csv', index=False)
 
+    # Generating Product related features for Test Data
+    tprod_features = pf.transform(X_train)
+    tprod_features.to_csv('../data/individual_features/test_prod_features.csv', index=False)
 
-# AUTHOR REALTED FEATURES
+    print "Product Features Generated"
 
-author_train_data = generate_author_features(X_train)
-author_test_data = generate_author_features(X_test)
+    # Generating component related features for Training Data
+    pf = ProductFeatures()
+    prod_features = pf.fit_transform(X_train, 'Component')
+    prod_features.to_csv('../data/individual_features/train_component_features.csv', index=False)
 
-print author_train_data.head()
-print author_test_data.head()
+    # Generating component related features for Test Data
+    tprod_features = pf.transform(X_test)
+    tprod_features.to_csv('../data/individual_features/test_component_features.csv', index=False)
 
-# Save data with temporal features
-author_train_data.to_csv('../data/train_author_features.csv', index=False)
-author_test_data.to_csv('../data/test_author_features.csv', index=False)
-
-
-# ## Product Features
-# 
-# - This has a total of 22 features.
-# - 11 are for 'Product' Feature and 11 are for 'Component' Feature
-
-
-# ### Generating Product related features for Train Data
-
-prod1 = generate_product_features1(data, 'Product')
-prod2 = generate_product_features2(data, 'Product')
-prod_features = pd.concat([prod1, prod2], axis=1)
-prod_features.to_csv('../data/train_prod_features.csv', index=False)
-
-# Generating Product related features for Test Data
-
-tprod1 = generate_product_features1(X_test, 'Product') 
-tprod2 = generate_product_features2(X_test, 'Product') `
-tprod_features = pd.concat([tprod1, tprod2], axis=1)
-tprod_features.to_csv('../data/test_prod_features.csv', index=False)
-
-
-# ### Generating component related features for Training Data
-prod3 = generate_product_features1(data, 'Component')
-prod4 = generate_product_features2(data, 'Component')
-prod_features = pd.concat([prod3, prod4], axis=1)
-prod_features.columns = ['PRO12', 'PRO13', 'PRO14', 'PRO15', 'PRO16', 'PRO17', 'PRO18', 'PRO19', 'PRO20', 'PRO21', 'PRO22']
-prod_features.to_csv('../data/train_component_features.csv', index=False)
-
-
-# ### Generating component related features for Test Data
-tprod3 = generate_product_features1(X_test, 'Component')
-tprod4 = generate_product_features2(X_test, 'Component')
-tprod_features = pd.concat([tprod3, tprod4], axis=1)
-tprod_features.shape
-tprod_features.columns = ['PRO12', 'PRO13', 'PRO14', 'PRO15', 'PRO16', 'PRO17', 'PRO18', 'PRO19', 'PRO20', 'PRO21', 'PRO22']
-tprod_features.to_csv('../data/test_component_features.csv', index=False)
+    print "Component Features Generated"
 
 
 # Merge all components into single file
+def merge_all_features():
+    # Original Training and testing data. For getting columns, priority, severity, bugID
+    train_original= pd.read_csv('../data/train-test-split/train.csv', parse_dates=['Changed', 'Opened'])
+    test_original = pd.read_csv('../data/train-test-split/test.csv', parse_dates=['Changed', 'Opened'])
 
-# Original Training and testing data. For getting columns, priority, severity, bugID
-train_original= pd.read_csv('../data/train-test-split/train.csv', parse_dates=['Changed', 'Opened'])
-test_original = pd.read_csv('../data/train-test-split/test.csv', parse_dates=['Changed', 'Opened'])
+    # Temporal Features
+    train_temporal = pd.read_csv('../data/individual_features/train_data_with_temporal.csv')
+    test_temporal = pd.read_csv('../data/individual_features/test_data_with_temporal.csv')
 
-# Temporal Features
-train_temporal = pd.read_csv('../data/individual_features/train_data_with_temporal.csv')
-test_temporal = pd.read_csv('../data/individual_features/test_data_with_temporal.csv')
+    # author Features
+    train_author = pd.read_csv('../data/individual_features/train_author_features.csv')
+    test_author = pd.read_csv('../data/individual_features/test_author_features.csv')
 
-# author Features
-train_author = pd.read_csv('../data/individual_features/train_author_features.csv')
-test_author = pd.read_csv('../data/individual_features/test_author_features.csv')
+    # Product Features
+    train_prod = pd.read_csv('../data/individual_features/train_prod_features.csv')
+    test_prod = pd.read_csv('../data/individual_features/test_prod_features.csv')
 
-# Product Features
-train_prod = pd.read_csv('../data/individual_features/train_prod_features.csv')
-test_prod = pd.read_csv('../data/individual_features/test_prod_features.csv')
+    # Component Features
+    train_comp = pd.read_csv('../data/individual_features/train_component_features.csv')
+    test_comp = pd.read_csv('../data/individual_features/test_component_features.csv')
 
-# Component Features
-train_comp = pd.read_csv('../data/individual_features/train_component_features.csv')
-test_comp = pd.read_csv('../data/individual_features/test_component_features.csv')
+    tmp_cols = list(train_temporal.columns)[13:]
 
-tmp_cols = list(train_temporal.columns)[13:]
+    train_final = [train_original.loc[:,['Bug ID', 'Severity', 'Priority', 'Summary']], train_temporal.loc[:, tmp_cols], 
+                   train_author,  train_prod, train_comp]
 
-train_final = [train_original.loc[:,['Bug ID', 'Severity', 'Priority', 'Summary']], train_temporal.loc[:, tmp_cols], 
-               train_author,  train_prod, train_comp]
-
-train_final = pd.concat(train_final, axis=1)
-train_final.to_csv('../data/processed/train_processed.csv', index=False)
+    train_final = pd.concat(train_final, axis=1)
+    train_final.to_csv('../data/processed/train_processed.csv', index=False)
 
 
-test_final = [test_original.loc[:,['Bug ID', 'Severity', 'Priority', 'Summary']], test_temporal.loc[:, tmp_cols], 
-               test_author,  test_prod, test_comp]
+    test_final = [test_original.loc[:,['Bug ID', 'Severity', 'Priority', 'Summary']], test_temporal.loc[:, tmp_cols], 
+                   test_author,  test_prod, test_comp]
 
-test_final = pd.concat(test_final, axis=1)
-test_final.to_csv('../data/processed/test_processed.csv', index=False)
+    test_final = pd.concat(test_final, axis=1)
+    test_final.to_csv('../data/processed/test_processed.csv', index=False)
 
+
+if __name__ == '__main__':
+    X_train, X_test = split_data('../data/raw/total_fixed.csv')
+    # X_train= pd.read_csv('../data/train-test-split/train.csv', parse_dates=['Changed', 'Opened'])
+    # X_test = pd.read_csv('../data/train-test-split/test.csv', parse_dates=['Changed', 'Opened'])
+    prepare_all_features(X_train, X_test)
+    merge_all_features()

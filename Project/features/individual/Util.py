@@ -1,5 +1,21 @@
 from datetime import datetime
 
+def generate_temporal_dict(data):
+    temporal_dict = {}
+
+    # Generates temporal dict which is used to generate temporal functions
+    # This should be based only on training data
+    for i in range(len(data)):
+        row = data.iloc[i]
+        t = (row['Opened'].date() - datetime(1970,1,1).date()).days
+        s = row['Severity']
+        if (t not in temporal_dict):
+            temporal_dict[t] = {}
+        if (s not in temporal_dict[t]):
+            temporal_dict[t][s] = 0
+        temporal_dict[t][s] += 1
+    return temporal_dict
+
 def generate_author_dict(data):
 	author_dict = {}
 
