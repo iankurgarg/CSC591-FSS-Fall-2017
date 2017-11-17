@@ -3,12 +3,12 @@
 ## Parameter Tuning for Comparison of Learners in Ordinal data Classification
 
 ### Dataset
-Eclipse Bugzilla Bug Reports between 2001-10-10 to 2007-12-14
-~ 103k Bug Reports.
+Eclipse Bugzilla Bug Reports between 2001-10-10 to 2007-12-14 <br />
+~ 103k Bug Reports. <br />
 
-Train - Test Split: 80:20
+Train - Test Split: 80:20 <br />
 
-raw and processed datasets present in [data](./data) directory
+raw and processed datasets present in [data](./data) directory <br />
 
 ### Feature Extraction
 Temporal Features, Author Features and Product Features generated as per description in Paper. <br />
