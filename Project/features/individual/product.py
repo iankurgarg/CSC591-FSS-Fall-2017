@@ -1,6 +1,6 @@
 from datetime import datetime
 import math
-from productUtil import *
+from Util import *
 
 
 X_train= pd.read_csv('../data/train.csv', parse_dates=['Changed', 'Opened'])
