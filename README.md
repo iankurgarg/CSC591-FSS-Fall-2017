@@ -26,5 +26,8 @@ Contains code and data files for Homework 5. Implements Contrasts Sets.
 ## [Essay](./Essay)
 Essay as per instructions [here](https://txt.github.io/fss17/essay)
 
+## [Project](./Project)
+Critque and Analysis of [DRONE](http://ieeexplore.ieee.org/document/6676891/?reload=true). Parameter Tuning using Differential Evolution. Feature Analysis. Reproduction of published results and comparison with Random Forest.
+
 ## References
 For more details about the course assignments and the projects, please visit the course webiste [here](https://txt.github.io/fss17/index)
