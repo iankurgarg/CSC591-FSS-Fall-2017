@@ -2,6 +2,10 @@
 
 ## Parameter Tuning for Comparison of Learners in Ordinal data Classification
 
+### Original Reference Paper
+DRONE: Predicting Priority of Reported Bugs by Multi-factor Analysis <br />
+http://ieeexplore.ieee.org/document/6676891/
+
 ### Dataset
 Eclipse Bugzilla Bug Reports between 2001-10-10 to 2007-12-14 <br />
 ~ 103k Bug Reports. <br />
