@@ -31,6 +31,9 @@ Code for the same is available [here](./code/data_preprocessing)
 ### Original Algorithm
 Implementation of DRONE is available [here](./code/DRONE.ipynb) <br />
 
+### Presentation
+<iframe src="https://docs.google.com/presentation/d/e/2PACX-1vRdtyMwFkwkVga6Zxa3KkuliTJdIu_qR9VK6P1sTyLTBS2ix6oZoc0f96Tw81uzFoplEenYqwe1GRZ0/embed?start=false&loop=false&delayms=3000" frameborder="0" width="960" height="569" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
 ### Comparison
 Results found are as follows: <br />
 
