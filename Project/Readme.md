@@ -37,6 +37,37 @@ Implementation of DRONE is available [here](./code/DRONE.ipynb) <br />
 ### Comparison
 Results found are as follows: <br />
 
+## Report
+1. Abstract & Introduction -- Clear problem definition in two sentences.
+2. Related Work & Critique
+  - Explain DRONE and the methodology briefly
+  - clearly state the "problems" with the paper
+4. Dataset & Evalution Criteria 
+  - Eclipse
+  - Feature engineering
+  - Evaluation on average F1, Average Precision, Average Recall
+5. Methodology
+  - Diagram of training and testing with CV (from PPT)
+  - Setting (we are compariing our results based on f1 score.. with drone)
+  - Tuning Algorithm (About DE)
+  - We tune for different objectives
+  - Improvements to original Algorithm --- Not sure about this
+6. Experiments & Results
+  - Research Questions
+  - Experimnent 1: 
+    - The goal of this experiment is tuning based on Average F1 score.
+    - Our results with graphs,
+    - Stats, box plot
+    - Model stability
+    - Choosen one
+    - Final comparison Table (Best, DRONE)
+  - Experiment 2: Precision
+  - Experiment 3: Recall
+  - Misc.. (DRONE V2)
+7. Conlusions (Analysis of results in terms of research questions)
+8. Future Work (Prorpose some stuff)
+
+
 ## Tasks
 1. Generate features and save a new CSV file
 2. Run RandomForest, NaiveBayes, AdaBoost on the data with updated features
