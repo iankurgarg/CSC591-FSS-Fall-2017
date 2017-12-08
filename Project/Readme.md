@@ -34,42 +34,15 @@ Implementation of DRONE is available [here](./code/DRONE.ipynb) <br />
 ### Presentation
 <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vRdtyMwFkwkVga6Zxa3KkuliTJdIu_qR9VK6P1sTyLTBS2ix6oZoc0f96Tw81uzFoplEenYqwe1GRZ0/embed?start=false&loop=false&delayms=3000" frameborder="0" width="960" height="569" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
 
-### Comparison
-Results found are as follows: <br />
+## Steps to Reproduce
+We provide the raw dataset as well as the processed dataset [here](./data). Disclaimer: Datasets have been sourced from [Eclipse Bugzilla](https://bugs.eclipse.org/bugs). It is available under Terms and conditions specified no the Eclipse Bugzilla Webpage. Refer [this](http://www.eclipse.org/legal/termsofuse.php) for any queries related to use or distribution of the dataset. <br /> 
+In case you would like to process the features again, the code with instructions for the same is present [here](./features) <br />
+Once the these features are generated, we need to generate count vector for `summary` column. For this we have [DataPreprocessing.py][./code/DataPreprocessing.py] which can be imported and used to preprocess training and testing data (using fit() and transform() methods). <br />
+Finally, code for running Differential Evolution is present [here](./code/DE.ipynb) <br />
+
+Implementation of the original DRONE algorithm is also available [here](./code/DRONE.ipynb) <br />
 
 ## Report
-1. Abstract & Introduction -- Clear problem definition in two sentences.
-2. Related Work & Critique
-  - Explain DRONE and the methodology briefly
-  - clearly state the "problems" with the paper
-4. Dataset & Evalution Criteria 
-  - Eclipse
-  - Feature engineering
-  - Evaluation on average F1, Average Precision, Average Recall
-5. Methodology
-  - Diagram of training and testing with CV (from PPT)
-  - Setting (we are compariing our results based on f1 score.. with drone)
-  - Tuning Algorithm (About DE)
-  - We tune for different objectives
-  - Improvements to original Algorithm --- Not sure about this
-6. Experiments & Results
-  - Research Questions
-  - Experimnent 1: 
-    - The goal of this experiment is tuning based on Average F1 score.
-    - Our results with graphs,
-    - Stats, box plot
-    - Model stability
-    - Choosen one
-    - Final comparison Table (Best, DRONE)
-  - Experiment 2: Precision
-  - Experiment 3: Recall
-  - Misc.. (DRONE V2)
-7. Conlusions (Analysis of results in terms of research questions)
-8. Future Work (Prorpose some stuff)
+Detailed report with results can be found [here](./report/Report_Group_I.pdf)
 
 
-## Tasks
-1. Generate features and save a new CSV file
-2. Run RandomForest, NaiveBayes, AdaBoost on the data with updated features
-3. Write Differential Evolution code for Hyperparameter Tuning.
-4. Do HPT for RF, AdaBoost etc and check how to run.
