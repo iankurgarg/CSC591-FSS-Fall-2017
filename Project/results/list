@@ -1,7 +1,0 @@
-1. Naive Bayes - (Without Tuning) - CV (average overall and not per class). Precision, Recall and F1 (per class and overall).
-2. Random Forest - (Without Tuning) - CV (average overall and not per class). Precision, Recall and F1 (per class and overall).
-3. Random Forest - (With tuning) - Set of parameters for which max f1. CV for that. Precision, Recall, F1 for the same.
-
-4. SVM  (without tuning) - comutationally expensive. No CV/ Tuning results
-5. DRONE (with LR) - (with and without tuning)
-6. DRONE (WITH RFR) - (with and without tuning)
